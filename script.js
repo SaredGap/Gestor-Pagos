@@ -56,26 +56,7 @@ function confirmPayment(index) {
     renderChart();
 }
 
-// Obtener los pagos confirmados desde el localStorage
-const confirmedPayments = JSON.parse(localStorage.getItem("confirmedPayments")) || [];
-const confirmedPaymentList = document.getElementById("confirmed-payment-list");
 
-// Función para renderizar los pagos confirmados
-function renderConfirmedPayments() {
-    confirmedPaymentList.innerHTML = "";
-    confirmedPayments.forEach(p => {
-        confirmedPaymentList.innerHTML += `
-            <tr>
-                <td class="border p-2">${p.concept}</td>
-                <td class="border p-2">$${p.amount}</td>
-                <td class="border p-2">${p.date}</td>
-            </tr>
-        `;
-    });
-}
-
-// Llamada a la función para mostrar los pagos confirmados
-renderConfirmedPayments();
 
 
 function renderChart() {
