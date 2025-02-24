@@ -14,11 +14,11 @@
 
         <form id="payment-form" class="mb-4">
             <!-- Campos de entrada adaptables al 100% del ancho -->
-            <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2">
-            <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2">
-            <input type="number" id="installments" placeholder="Número de Cuotas" class="border p-2 rounded w-full mb-2">
-            <input type="date" id="date" class="border p-2 rounded w-full mb-2">
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Agregar Pago</button>
+            <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2" aria-label="Concepto del pago">
+            <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2" aria-label="Monto del pago">
+            <input type="number" id="installments" placeholder="Número de Cuotas" class="border p-2 rounded w-full mb-2" aria-label="Número de cuotas">
+            <input type="date" id="date" class="border p-2 rounded w-full mb-2" aria-label="Fecha del pago">
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full" aria-label="Agregar pago">Agregar Pago</button>
         </form>
 
         <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
@@ -38,7 +38,7 @@
         </table>
 
         <!-- Botón para mostrar pagos completados -->
-        <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded w-full mt-4">
+        <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded w-full mt-4" aria-label="Mostrar pagos completados">
             Mostrar Pagos Completados
         </button>
 
@@ -58,12 +58,12 @@
         </div>
 
         <!-- Modal para realizar el pago -->
-        <div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="payment-modal-label" role="dialog" aria-hidden="true">
             <div class="bg-white p-6 rounded shadow-md w-full sm:max-w-sm">
-                <h2 class="text-xl font-semibold mb-4">Realizar Pago</h2>
-                <input type="number" id="payment-amount" placeholder="Monto a pagar" class="border p-2 rounded w-full mb-2">
-                <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full">Confirmar Pago</button>
-                <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2">Cancelar</button>
+                <h2 id="payment-modal-label" class="text-xl font-semibold mb-4">Realizar Pago</h2>
+                <input type="number" id="payment-amount" placeholder="Monto a pagar" class="border p-2 rounded w-full mb-2" aria-label="Monto a pagar">
+                <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full" aria-label="Confirmar pago">Confirmar Pago</button>
+                <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2" aria-label="Cerrar modal">Cancelar</button>
             </div>
         </div>
     </div>
