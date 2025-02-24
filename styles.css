@@ -53,6 +53,33 @@ button:hover {
     background-color: #3182ce;
 }
 
+.bg-purple-500 {
+    background-color: #9b59b6;
+    color: white;
+}
+
+.bg-purple-500:hover {
+    background-color: #8e44ad;
+}
+
+.bg-green-500 {
+    background-color: #38a169;
+    color: white;
+}
+
+.bg-green-500:hover {
+    background-color: #2f855a;
+}
+
+.bg-red-500 {
+    background-color: #e53e3e;
+    color: white;
+}
+
+.bg-red-500:hover {
+    background-color: #c53030;
+}
+
 /* Animaciones */
 .hidden {
     display: none;
@@ -65,33 +92,61 @@ button:hover {
     opacity: 1;
 }
 
-/* Estilo de la tabla */
-table {
-    margin-bottom: 2rem;
+/* Diseño Responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.875rem;
+    }
+
+    th, td {
+        padding: 0.5rem;
+    }
+
+    button {
+        font-size: 0.875rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    /* Ocultar contenido no necesario en pantallas pequeñas */
+    .hidden {
+        display: none;
+    }
 }
 
-/* Estilo de pagos confirmados */
-#confirmed-payments {
-    margin-top: 2rem;
+/* Efecto de hover en celdas */
+td:hover {
+    background-color: #f4f4f4;
 }
 
-/* Estilos para los mensajes de éxito o error */
-.message {
+/* Transición de los botones */
+button {
+    transition: transform 0.1s ease-in-out;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Notificaciones tipo toast */
+.toast {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #38a169;
+    color: white;
     padding: 10px;
     border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    z-index: 9999;
-    transition: opacity 0.5s ease;
+    font-size: 1rem;
+    display: none;
+    transition: opacity 0.5s ease-in-out;
 }
 
-.message.success {
-    background-color: green;
+.toast.error {
+    background-color: #e53e3e;
 }
 
-.message.error {
-    background-color: red;
+.toast.show {
+    display: block;
+    opacity: 1;
 }
