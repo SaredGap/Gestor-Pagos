@@ -1,119 +1,129 @@
-const payments = JSON.parse(localStorage.getItem("payments")) || [];
-const confirmedPayments = JSON.parse(localStorage.getItem("confirmedPayments")) || [];
+// Inicializamos la lista de pagos desde localStorage, o un array vacío si no existe
+let payments = JSON.parse(localStorage.getItem("payments")) || [];
 const paymentList = document.getElementById("payment-list");
 const totalAmountElement = document.getElementById("total-amount");
-const confirmedPaymentList = document.getElementById("confirmed-payment-list");
-const ctx = document.getElementById("paymentChart").getContext("2d");
-let chart;
 
-// Agregar pago
-
-// Agregar pago
 document.getElementById("payment-form").addEventListener("submit", function(event) {
     event.preventDefault();
+    
     const concept = document.getElementById("concept").value;
-    const amount = document.getElementById("amount").value;
-    const date = document.getElementById("date").value;
+    const amount = parseFloat(document.getElementById("amount").value);
+    const installments = parseInt(document.getElementById("installments").value);
+    const startDate = document.getElementById("start-date").value;
 
-    // Validación para asegurarse de que los campos no estén vacíos
-    if (concept && amount && date) {
-        payments.push({ concept, amount: parseFloat(amount), date });
-        localStorage.setItem("payments", JSON.stringify(payments));
+    if (concept && amount && installments && startDate) {
+        const payment = {
+            concept,
+            amount,
+            installments,
+            startDate,
+            remainingAmount: amount,
+            installmentsData: generateInstallments(installments, amount, startDate)
+        };
 
-        renderPayments(); // Renderizar la lista de pagos
-        renderChart(); // Actualizar la gráfica
-        this.reset(); // Limpiar los campos del formulario
-
-        // Mostrar mensaje de éxito al agregar el pago
-        showMessage("Pago agregado correctamente", "success");
+        payments.push(payment);
+        localStorage.setItem("payments", JSON.stringify(payments));  // Guardar el pago en localStorage
+        renderPayments();
+        this.reset();
     } else {
-        // Mostrar mensaje de error si falta información
-        showMessage("Por favor, completa todos los campos.", "error");
+        alert("Por favor, completa todos los campos.");
     }
 });
 
-// Función para mostrar mensajes dinámicos de éxito o error
-function showMessage(message, type) {
-    const messageContainer = document.createElement("div");
-    messageContainer.textContent = message;
-    messageContainer.classList.add("message", type);
+// Generar las cuotas
+function generateInstallments(installments, amount, startDate) {
+    const installmentAmount = amount / installments;
+    let installmentsData = [];
+    let currentDate = new Date(startDate);
 
-    // Agregar el mensaje en el contenedor de la página
-    document.body.appendChild(messageContainer);
+    for (let i = 1; i <= installments; i++) {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        installmentsData.push({
+            installmentNumber: i,
+            dueDate: currentDate.toISOString().split('T')[0],
+            amount: installmentAmount,
+            paid: 0
+        });
+    }
 
-    // Ocultar el mensaje después de 3 segundos
-    setTimeout(() => {
-        messageContainer.remove();
-    }, 3000);
+    return installmentsData;
 }
 
-
-
-// Renderizar los pagos
+// Función para renderizar los pagos
 function renderPayments() {
     paymentList.innerHTML = "";
     let total = 0;
-    payments.forEach((p, index) => {
-        total += p.amount;
+    payments.forEach((payment, index) => {
+        total += payment.amount;
         paymentList.innerHTML += `
             <tr>
-                <td class="border p-2">${p.concept}</td>
-                <td class="border p-2">$${p.amount}</td>
-                <td class="border p-2">${p.date}</td>
-                <td class="border p-2">
-                    <button onclick="confirmPayment(${index})" class="bg-green-500 text-white p-1 rounded">Confirmar</button>
-                    <button onclick="deletePayment(${index})" class="bg-red-500 text-white p-1 rounded ml-2">Eliminar</button>
+                <td>${payment.concept}</td>
+                <td>$${payment.amount.toFixed(2)}</td>
+                <td>${payment.startDate}</td>
+                <td>
+                    <button onclick="viewInstallments(${index})" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#installmentsModal">Ver Cuotas</button>
+                    <button onclick="deletePayment(${index})" class="btn btn-danger btn-sm">Eliminar</button>
                 </td>
             </tr>
         `;
     });
-    totalAmountElement.textContent = total;
+    totalAmountElement.textContent = `$${total.toFixed(2)}`;
 }
 
-// Eliminar pago
+
+// Función para ver cuotas
+function viewInstallments(index) {
+    const payment = payments[index];
+    const installmentsList = document.getElementById("installments-list");
+    installmentsList.innerHTML = '';
+
+    payment.installmentsData.forEach(installment => {
+        const li = document.createElement("li");
+        li.innerHTML = `<p>Cuota ${installment.installmentNumber}: $${installment.amount.toFixed(2)} - Fecha: ${installment.dueDate} - Saldo pendiente: $${(installment.amount - installment.paid).toFixed(2)}</p>`;
+        installmentsList.appendChild(li);
+    });
+
+    const payButton = document.getElementById("pay-button");
+    payButton.onclick = () => payInstallment(index);
+}
+
+// Función para realizar el pago de cuotas
+// Función para eliminar un pago
 function deletePayment(index) {
-    payments.splice(index, 1);
-    localStorage.setItem("payments", JSON.stringify(payments));
-    renderPayments();
-    renderChart();
-}
-
-// Confirmar pago
-function confirmPayment(index) {
-    confirmedPayments.push(payments[index]);
-    payments.splice(index, 1);
-    localStorage.setItem("payments", JSON.stringify(payments));
-    localStorage.setItem("confirmedPayments", JSON.stringify(confirmedPayments));
-    renderPayments();
-    renderChart();
-}
-
-
-
-// Mostrar/Ocultar pagos confirmados
-function toggleConfirmedPayments() {
-    const confirmedDiv = document.getElementById("confirmed-payments");
-    confirmedDiv.classList.toggle("hidden");
-
-    if (!confirmedDiv.classList.contains("hidden")) {
-        renderConfirmedPayments();
+    const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este pago?");
+    if (confirmDelete) {
+        payments.splice(index, 1);
+        localStorage.setItem("payments", JSON.stringify(payments));  // Actualizar localStorage
+        renderPayments();  // Re-renderizar pagos después de eliminar
+        alert("Pago eliminado.");
     }
 }
 
-// Renderizar pagos confirmados
-function renderConfirmedPayments() {
-    confirmedPaymentList.innerHTML = "";
-    confirmedPayments.forEach(p => {
-        confirmedPaymentList.innerHTML += `
-            <tr>
-                <td class="border p-2">${p.concept}</td>
-                <td class="border p-2">$${p.amount}</td>
-                <td class="border p-2">${p.date}</td>
-            </tr>
-        `;
-    });
-}
+// Función para realizar el pago de cuotas
+function payInstallment(index) {
+    let paymentAmount = parseFloat(document.getElementById("payment-amount").value);
+    let payment = payments[index];  // Usamos let para asegurar que el valor de payment sea modificable
+    let totalPaid = 0;
 
-// Inicializa los pagos y gráfico
-renderPayments();
-renderChart();
+    // Realizamos el pago de las cuotas
+    for (let i = 0; i < payment.installmentsData.length; i++) {
+        if (payment.installmentsData[i].paid < payment.installmentsData[i].amount && paymentAmount > 0) {
+            const remainingAmount = payment.installmentsData[i].amount - payment.installmentsData[i].paid;
+            const amountToPay = Math.min(remainingAmount, paymentAmount);
+
+            payment.installmentsData[i].paid += amountToPay;
+            totalPaid += amountToPay;
+            paymentAmount -= amountToPay;
+        }
+
+        if (paymentAmount <= 0) break;
+    }
+
+    payment.remainingAmount -= totalPaid;
+    localStorage.setItem("payments", JSON.stringify(payments));  // Actualizar localStorage
+
+    // Actualizamos la vista sin recargar la página
+    renderPayments();
+    document.getElementById("payment-amount").value = ''; // Limpiamos el input
+    alert(`Has abonado $${totalPaid.toFixed(2)}.`);
+}
