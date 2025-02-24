@@ -2,8 +2,7 @@ const payments = JSON.parse(localStorage.getItem("payments")) || [];
 const confirmedPayments = JSON.parse(localStorage.getItem("confirmedPayments")) || [];
 const paymentList = document.getElementById("payment-list");
 const totalAmountElement = document.getElementById("total-amount");
-const ctx = document.getElementById("paymentChart").getContext("2d");
-let chart;
+const confirmedPaymentList = document.getElementById("confirmed-payment-list");
 
 document.getElementById("payment-form").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -15,8 +14,6 @@ document.getElementById("payment-form").addEventListener("submit", function(even
         payments.push({ concept, amount: parseFloat(amount), date });
         localStorage.setItem("payments", JSON.stringify(payments));
         renderPayments();
-        renderChart();
-        this.reset();
     }
 });
 
@@ -44,7 +41,6 @@ function deletePayment(index) {
     payments.splice(index, 1);
     localStorage.setItem("payments", JSON.stringify(payments));
     renderPayments();
-    renderChart();
 }
 
 function confirmPayment(index) {
@@ -53,63 +49,32 @@ function confirmPayment(index) {
     localStorage.setItem("payments", JSON.stringify(payments));
     localStorage.setItem("confirmedPayments", JSON.stringify(confirmedPayments));
     renderPayments();
-    renderChart();
+    renderConfirmedPayments();
 }
 
-
-
-
-function renderChart() {
-    const labels = payments.map(p => p.concept);
-    const data = payments.map(p => p.amount);
-    
-    if (chart) chart.destroy();
-    chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels,
-            datasets: [{
-                label: 'Gastos',
-                data,
-                backgroundColor: 'rgba(54, 162, 235, 0.5)'
-            }]
-        }
+function renderConfirmedPayments() {
+    confirmedPaymentList.innerHTML = "";
+    confirmedPayments.forEach(p => {
+        confirmedPaymentList.innerHTML += `
+            <tr>
+                <td class="border p-2">${p.concept}</td>
+                <td class="border p-2">$${p.amount}</td>
+                <td class="border p-2">${p.date}</td>
+            </tr>
+        `;
     });
 }
 
-// Obtener los pagos confirmados desde el localStorage
-const confirmedPayments = JSON.parse(localStorage.getItem("confirmedPayments")) || [];
-const confirmedPaymentList = document.getElementById("confirmed-payment-list");
-
-// Mostrar en consola los pagos confirmados
-console.log('Pagos Confirmados:', confirmedPayments);
-
-// Función para renderizar los pagos confirmados
-function renderConfirmedPayments() {
-    confirmedPaymentList.innerHTML = "";  // Limpiar la tabla antes de agregar datos
-
-    if (confirmedPayments.length === 0) {
-        confirmedPaymentList.innerHTML = `
-            <tr>
-                <td colspan="3" class="border p-2 text-center">No hay pagos confirmados</td>
-            </tr>
-        `;
-    } else {
-        confirmedPayments.forEach(p => {
-            confirmedPaymentList.innerHTML += `
-                <tr>
-                    <td class="border p-2">${p.concept}</td>
-                    <td class="border p-2">$${p.amount}</td>
-                    <td class="border p-2">${p.date}</td>
-                </tr>
-            `;
-        });
-    }
+// Función para mostrar u ocultar secciones
+function showSection(section) {
+    const sections = document.querySelectorAll(".section");
+    sections.forEach(s => {
+        s.classList.add("hidden");
+    });
+    document.getElementById(section).classList.remove("hidden");
 }
 
-// Llamada a la función para mostrar los pagos confirmados
+// Inicializar la página con los pagos
+renderPayments();
 renderConfirmedPayments();
 
-
-renderPayments();
-renderChart();a
