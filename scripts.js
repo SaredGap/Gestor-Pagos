@@ -70,6 +70,15 @@ function renderPayments() {
     totalAmountElement.textContent = `$${total.toFixed(2)}`;
 }
 
+// Función para eliminar un pago
+function deletePayment(index) {
+    const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este pago?");
+    if (confirmDelete) {
+        payments.splice(index, 1);
+        localStorage.setItem("payments", JSON.stringify(payments));  // Actualizar localStorage
+        renderPayments();
+    }
+}
 
 // Función para ver cuotas
 function viewInstallments(index) {
@@ -85,18 +94,6 @@ function viewInstallments(index) {
 
     const payButton = document.getElementById("pay-button");
     payButton.onclick = () => payInstallment(index);
-}
-
-// Función para realizar el pago de cuotas
-// Función para eliminar un pago
-function deletePayment(index) {
-    const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este pago?");
-    if (confirmDelete) {
-        payments.splice(index, 1);
-        localStorage.setItem("payments", JSON.stringify(payments));  // Actualizar localStorage
-        renderPayments();  // Re-renderizar pagos después de eliminar
-        alert("Pago eliminado.");
-    }
 }
 
 // Función para realizar el pago de cuotas
@@ -120,10 +117,13 @@ function payInstallment(index) {
     }
 
     payment.remainingAmount -= totalPaid;
-    localStorage.setItem("payments", JSON.stringify(payments));  // Actualizar localStorage
+    localStorage.setItem("payments", JSON.stringify(payments));
 
-    // Actualizamos la vista sin recargar la página
+    // Actualizamos la vista
     renderPayments();
     document.getElementById("payment-amount").value = ''; // Limpiamos el input
     alert(`Has abonado $${totalPaid.toFixed(2)}.`);
 }
+
+// Llamamos a renderPayments para cargar los pagos al inicio
+renderPayments();
