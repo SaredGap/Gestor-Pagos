@@ -77,5 +77,39 @@ function renderChart() {
     });
 }
 
+// Obtener los pagos confirmados desde el localStorage
+const confirmedPayments = JSON.parse(localStorage.getItem("confirmedPayments")) || [];
+const confirmedPaymentList = document.getElementById("confirmed-payment-list");
+
+// Mostrar en consola los pagos confirmados
+console.log('Pagos Confirmados:', confirmedPayments);
+
+// Función para renderizar los pagos confirmados
+function renderConfirmedPayments() {
+    confirmedPaymentList.innerHTML = "";  // Limpiar la tabla antes de agregar datos
+
+    if (confirmedPayments.length === 0) {
+        confirmedPaymentList.innerHTML = `
+            <tr>
+                <td colspan="3" class="border p-2 text-center">No hay pagos confirmados</td>
+            </tr>
+        `;
+    } else {
+        confirmedPayments.forEach(p => {
+            confirmedPaymentList.innerHTML += `
+                <tr>
+                    <td class="border p-2">${p.concept}</td>
+                    <td class="border p-2">$${p.amount}</td>
+                    <td class="border p-2">${p.date}</td>
+                </tr>
+            `;
+        });
+    }
+}
+
+// Llamada a la función para mostrar los pagos confirmados
+renderConfirmedPayments();
+
+
 renderPayments();
 renderChart();a
