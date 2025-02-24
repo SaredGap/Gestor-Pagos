@@ -7,10 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-4">
-    <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+
+    <!-- Contenedor principal con un max-width para dispositivos grandes y se ajusta en pantallas pequeñas -->
+    <div class="max-w-full mx-auto bg-white p-4 rounded-lg shadow-md">
         <h1 class="text-2xl font-bold mb-4">Gestor de Pagos</h1>
 
         <form id="payment-form" class="mb-4">
+            <!-- Campos de entrada adaptables al 100% del ancho -->
             <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2">
             <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2">
             <input type="number" id="installments" placeholder="Número de Cuotas" class="border p-2 rounded w-full mb-2">
@@ -20,6 +23,7 @@
 
         <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
 
+        <!-- Tabla con un borde para el diseño -->
         <table class="w-full border-collapse border border-gray-300 mt-4">
             <thead>
                 <tr class="bg-gray-200">
@@ -33,31 +37,34 @@
             <tbody id="payment-list"></tbody>
         </table>
 
-        <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded">
-    Mostrar Pagos Completados
-</button>
+        <!-- Botón para mostrar pagos completados -->
+        <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded w-full mt-4">
+            Mostrar Pagos Completados
+        </button>
 
-<div id="completed-payments-section" class="hidden">
-    <h2 class="text-lg font-bold">Pagos Completados</h2>
-    <table class="w-full border">
-        <thead>
-            <tr>
-                <th class="border p-2">Concepto</th>
-                <th class="border p-2">Monto Total</th>
-                <th class="border p-2">Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="completed-payments-list"></tbody>
-    </table>
-</div>
+        <!-- Sección de pagos completados que se oculta inicialmente -->
+        <div id="completed-payments-section" class="hidden mt-4">
+            <h2 class="text-lg font-bold">Pagos Completados</h2>
+            <table class="w-full border">
+                <thead>
+                    <tr>
+                        <th class="border p-2">Concepto</th>
+                        <th class="border p-2">Monto Total</th>
+                        <th class="border p-2">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="completed-payments-list"></tbody>
+            </table>
+        </div>
 
-
-    <div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white p-6 rounded shadow-md">
-            <h2 class="text-xl font-semibold mb-4">Realizar Pago</h2>
-            <input type="number" id="payment-amount" placeholder="Monto a pagar" class="border p-2 rounded w-full mb-2">
-            <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full">Confirmar Pago</button>
-            <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2">Cancelar</button>
+        <!-- Modal para realizar el pago -->
+        <div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded shadow-md w-full sm:max-w-sm">
+                <h2 class="text-xl font-semibold mb-4">Realizar Pago</h2>
+                <input type="number" id="payment-amount" placeholder="Monto a pagar" class="border p-2 rounded w-full mb-2">
+                <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full">Confirmar Pago</button>
+                <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2">Cancelar</button>
+            </div>
         </div>
     </div>
 
