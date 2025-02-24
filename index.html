@@ -5,45 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Pagos</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-100 p-4">
     <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 class="text-2xl font-bold mb-4">Gestor de Pagos</h1>
         
-        <!-- Botones para cambiar entre secciones -->
-        <div class="flex mb-4">
-            <button onclick="showSection('unconfirmed')" class="bg-blue-500 text-white p-2 rounded w-1/2">Pagos Pendientes</button>
-            <button onclick="showSection('confirmed')" class="bg-green-500 text-white p-2 rounded w-1/2">Pagos Confirmados</button>
-        </div>
-
-        <!-- Sección de pagos pendientes (oculta por defecto) -->
-        <div id="unconfirmed" class="section">
-            <form id="payment-form" class="mb-4">
-                <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2">
-                <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2">
-                <input type="date" id="date" class="border p-2 rounded w-full mb-2">
-                <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Agregar Pago</button>
-            </form>
-            
-            <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
-            
-            <table class="w-full border-collapse border border-gray-300 mt-4">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border p-2">Concepto</th>
-                        <th class="border p-2">Monto</th>
-                        <th class="border p-2">Fecha</th>
-                        <th class="border p-2">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="payment-list"></tbody>
-            </table>
-        </div>
+        <form id="payment-form" class="mb-4">
+            <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2">
+            <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2">
+            <input type="date" id="date" class="border p-2 rounded w-full mb-2">
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Agregar Pago</button>
+        </form>
         
-        <!-- Sección de pagos confirmados (oculta por defecto) -->
-        <div id="confirmed" class="section hidden">
-            <table class="w-full border-collapse border border-gray-300 mt-4">
+        <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
+        
+        <table class="w-full border-collapse border border-gray-300 mt-4">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Concepto</th>
+                    <th class="border p-2">Monto</th>
+                    <th class="border p-2">Fecha</th>
+                    <th class="border p-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="payment-list"></tbody>
+        </table>
+
+        <!-- Botón para mostrar pagos confirmados -->
+        <button onclick="toggleConfirmedPayments()" class="mt-4 bg-blue-500 text-white p-2 rounded w-full">
+            Mostrar/Ocultar Pagos Confirmados
+        </button>
+
+        <!-- Sección de pagos confirmados -->
+        <div id="confirmed-payments" class="hidden mt-4">
+            <h3 class="text-lg font-semibold">Pagos Confirmados</h3>
+            <table class="w-full border-collapse border border-gray-300 mt-2">
                 <thead>
                     <tr class="bg-gray-200">
                         <th class="border p-2">Concepto</th>
@@ -54,8 +51,10 @@
                 <tbody id="confirmed-payment-list"></tbody>
             </table>
         </div>
+        
+        <canvas id="paymentChart" class="mt-4"></canvas>
     </div>
 
-    <script src="script.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
