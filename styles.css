@@ -3,23 +3,31 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f7fafc;
     padding: 2rem;
+    margin: 0;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 1rem;
+    color: #333;
+    overflow-x: auto; /* Asegura que las tablas se deslicen en pantallas pequeñas */
 }
 
 th, td {
     padding: 1rem;
     text-align: left;
     border: 1px solid #ddd;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Títulos y Encabezados */
 th {
     background-color: #4c51bf;
     color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 td {
@@ -28,20 +36,24 @@ td {
 
 td:hover {
     background-color: #f4f4f4;
+    color: #333;
 }
 
 /* Botones */
 button {
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+    font-weight: 600;
+    width: 100%; /* Hacer que los botones ocupen el 100% del ancho en pantallas pequeñas */
+    margin-top: 10px;
 }
 
 button:hover {
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .bg-blue-500 {
@@ -92,37 +104,12 @@ button:hover {
     opacity: 1;
 }
 
-/* Diseño Responsivo para pantallas pequeñas */
-@media (max-width: 768px) {
-    table {
-        font-size: 0.875rem;
-    }
-
-    th, td {
-        padding: 0.5rem;
-    }
-
-    button {
-        font-size: 0.875rem;
-        padding: 0.4rem 0.8rem;
-    }
-
-    /* Ocultar contenido no necesario en pantallas pequeñas */
-    .hidden {
-        display: none;
-    }
-}
-
 /* Efecto de hover en celdas */
 td:hover {
     background-color: #f4f4f4;
 }
 
 /* Transición de los botones */
-button {
-    transition: transform 0.1s ease-in-out;
-}
-
 button:active {
     transform: scale(0.98);
 }
@@ -149,4 +136,91 @@ button:active {
 .toast.show {
     display: block;
     opacity: 1;
+}
+
+/* Diseño Responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+    /* Ajustes generales */
+    body {
+        padding: 1rem;
+    }
+
+    table {
+        font-size: 0.875rem;
+        overflow-x: auto; /* Permite desplazarse horizontalmente si la tabla es muy ancha */
+    }
+
+    th, td {
+        padding: 0.8rem;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 0.6rem;
+        width: 100%; /* Botones a pantalla completa */
+    }
+
+    /* Esconder contenido innecesario */
+    .hidden {
+        display: none;
+    }
+
+    /* Modificar celdas en dispositivos móviles */
+    td {
+        padding: 1rem 0.5rem; /* Menos espacio horizontal en pantallas pequeñas */
+        font-size: 0.9rem;
+    }
+
+    td:hover {
+        background-color: #e0e0e0; /* Color de hover más suave en móviles */
+    }
+
+    /* Hacer que los encabezados de la tabla se mantengan visibles al hacer scroll */
+    th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #4c51bf;
+    }
+
+    /* Ajustar las notificaciones (toast) para pantallas pequeñas */
+    .toast {
+        width: 90%; /* Hacer los toast más pequeños */
+        bottom: 10px; /* Colocar más cerca de la parte inferior */
+    }
+
+    /* Para los modales */
+    .modal-content {
+        padding: 1rem;
+        width: 90%;
+    }
+
+    .modal-header {
+        font-size: 1.2rem;
+    }
+
+    /* Rediseño de cards */
+    .card {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+    .card-header {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    /* Tooltip */
+    .tooltip {
+        font-size: 0.8rem;
+        padding: 8px;
+        border-radius: 8px;
+        max-width: 80%; /* Tooltip más pequeño en dispositivos móviles */
+    }
 }
