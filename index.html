@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Pagos</title>
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4">Gestor de Pagos</h1>
+        
+        <form id="payment-form" class="mb-4">
+            <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2">
+            <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2">
+            <input type="date" id="date" class="border p-2 rounded w-full mb-2">
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Agregar Pago</button>
+        </form>
+        
+        <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
+        
+        <table class="w-full border-collapse border border-gray-300 mt-4">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Concepto</th>
+                    <th class="border p-2">Monto</th>
+                    <th class="border p-2">Fecha</th>
+                    <th class="border p-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="payment-list"></tbody>
+        </table>
+        
+        <a href="pagos-confirmados.html" class="mt-4 inline-block bg-green-500 text-white p-2 rounded">Ver Pagos Confirmados</a>
+        
+        <canvas id="paymentChart" class="mt-4"></canvas>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
