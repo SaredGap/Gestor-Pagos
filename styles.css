@@ -4,6 +4,7 @@ body {
     background-color: #f7fafc;
     padding: 2rem;
     margin: 0;
+    box-sizing: border-box;
 }
 
 /* Tabla */
@@ -11,6 +12,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 2rem;
+    table-layout: fixed; /* Hace que las celdas tengan un ancho fijo */
 }
 
 th, td {
@@ -18,6 +20,7 @@ th, td {
     text-align: left;
     border: 1px solid #ddd;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    word-wrap: break-word; /* Asegura que el texto largo no se desborde */
 }
 
 th {
@@ -42,6 +45,7 @@ button {
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s ease, opacity 0.3s ease;
+    width: 100%;
 }
 
 button:hover {
@@ -121,6 +125,7 @@ button:focus {
     /* Ajusta las celdas de la tabla en pantallas pequeñas */
     td {
         font-size: 0.9rem;
+        word-wrap: break-word; /* Evita que el contenido largo se desborde */
     }
 
     /* Modificar el tamaño de la fuente en el título */
@@ -130,5 +135,25 @@ button:focus {
 
     h2 {
         font-size: 1.25rem;
+    }
+
+    /* Ajustar márgenes de las celdas */
+    th, td {
+        padding: 0.5rem;
+    }
+
+    /* Ajustar tamaño de los campos de texto */
+    input[type="text"], input[type="number"], input[type="date"] {
+        font-size: 1rem;
+    }
+
+    /* Hacer el formulario más compacto */
+    form {
+        padding: 1rem;
+    }
+
+    /* Hacer que los títulos se ajusten */
+    h1, h2 {
+        text-align: center;
     }
 }
