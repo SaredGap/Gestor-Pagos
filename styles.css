@@ -1,0 +1,106 @@
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.max-w-3xl {
+    max-width: 960px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.bg-gray-100 {
+    background-color: #f7fafc;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.bg-blue-500 {
+    background-color: #3b82f6;
+}
+
+.bg-green-500 {
+    background-color: #10b981;
+}
+
+.bg-red-500 {
+    background-color: #ef4444;
+}
+
+.text-white {
+    color: white;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.p-2 {
+    padding: 8px;
+}
+
+.p-4 {
+    padding: 16px;
+}
+
+.p-6 {
+    padding: 24px;
+}
+
+.rounded {
+    border-radius: 8px;
+}
+
+.shadow-md {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mt-4 {
+    margin-top: 16px;
+}
+
+.ml-2 {
+    margin-left: 8px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.border {
+    border: 1px solid #e5e7eb;
+}
+
+.border-collapse {
+    border-collapse: collapse;
+}
+
+.bg-gray-200 {
+    background-color: #e5e7eb;
+}
