@@ -33,7 +33,9 @@ document.getElementById("payment-form").addEventListener("submit", function(even
         }
 
         saveAndRender();
-        this.reset();
+        this.reset(); // Limpiar los campos después de agregar un pago
+    } else {
+        alert("Por favor, completa todos los campos correctamente.");
     }
 });
 
@@ -120,18 +122,25 @@ function closeModal() {
 
 function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
-    let selectedPayments = payments.filter(p => p.id === currentPaymentId);
 
-    for (let p of selectedPayments) {
+    if (isNaN(amountToPay) || amountToPay <= 0) {
+        alert("Por favor, ingresa un monto válido.");
+        return;
+    }
+
+    let selectedPayments = payments.filter(p => p.id === currentPaymentId);
+    let totalPaid = 0;
+
+    selectedPayments.forEach(p => {
         if (amountToPay > 0) {
             let paymentAmount = Math.min(amountToPay, p.pending);
             p.paid += paymentAmount;
             p.pending -= paymentAmount;
             amountToPay -= paymentAmount;
+            totalPaid += paymentAmount;
         }
-    }
+    });
 
-    let totalPaid = selectedPayments.reduce((sum, p) => sum + p.paid, 0);
     let totalAmount = selectedPayments[0]?.totalAmount || 0;
 
     if (totalPaid >= totalAmount) {
