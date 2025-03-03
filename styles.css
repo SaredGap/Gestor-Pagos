@@ -25,7 +25,7 @@ body {
 /* Tabla */
 table {
     width: 100%;
-    overflow-x: auto; /* Permite el desplazamiento horizontal */
+    overflow-x: auto; /* Para permitir desplazamiento */
     display: block;
     margin-bottom: 2rem;
     table-layout: fixed; /* Asegura que las celdas tengan un ancho fijo */
@@ -161,7 +161,9 @@ button:focus {
 
     /* Ajustar el contenedor de la tabla en pantallas pequeñas */
     .table-container {
-        overflow-x: auto; /* Permite el desplazamiento horizontal */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%; /* Previene el desbordamiento */
     }
 }
 
