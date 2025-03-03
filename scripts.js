@@ -125,6 +125,7 @@ function openPaymentModal(paymentId, pendingAmount) {
     currentPaymentId = paymentId;
     document.getElementById("payment-modal").classList.remove("hidden");
     document.getElementById("payment-amount").value = pendingAmount.toFixed(2);
+    document.getElementById("payment-method").value = ''; // Limpiar el campo del método de pago
 }
 
 function closeModal() {
@@ -133,10 +134,15 @@ function closeModal() {
 
 function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
-    const paymentMethod = prompt("Ingresa el método de pago (ej. Tarjeta, Transferencia, etc.):");
+    const paymentMethod = document.getElementById("payment-method").value;
 
     if (isNaN(amountToPay) || amountToPay <= 0) {
         alert("Por favor, ingresa un monto válido.");
+        return;
+    }
+    
+    if (!paymentMethod) {
+        alert("Por favor, selecciona un método de pago.");
         return;
     }
 
