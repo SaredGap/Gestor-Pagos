@@ -5,25 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Pagos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluir Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-gray-100 p-4">
 
-    <!-- Contenedor principal con un max-width para dispositivos grandes y se ajusta en pantallas pequeñas -->
     <div class="max-w-full mx-auto bg-white p-4 rounded-lg shadow-md">
         <h1 class="text-2xl font-bold mb-4">Gestor de Pagos</h1>
 
         <form id="payment-form" class="mb-4">
-            <!-- Campos de entrada adaptables al 100% del ancho -->
             <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2" aria-label="Concepto del pago">
             <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2" aria-label="Monto del pago">
             <input type="number" id="installments" placeholder="Número de Cuotas" class="border p-2 rounded w-full mb-2" aria-label="Número de cuotas">
             <input type="date" id="date" class="border p-2 rounded w-full mb-2" aria-label="Fecha del pago">
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full" aria-label="Agregar pago">Agregar Pago</button>
+            <!-- Botón de agregar pago reemplazado por icono -->
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full flex items-center justify-center">
+                <i class="fas fa-plus mr-2"></i>Agregar Pago
+            </button>
         </form>
 
         <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
 
-        <!-- Contenedor de la tabla con desplazamiento horizontal -->
         <div class="table-container overflow-x-auto mt-4">
             <table class="w-full border-collapse border border-gray-300">
                 <thead>
@@ -40,11 +42,10 @@
         </div>
 
         <!-- Botón para mostrar pagos completados -->
-        <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded w-full mt-4" aria-label="Mostrar pagos completados">
-            Mostrar Pagos Completados
+        <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded w-full mt-4 flex items-center justify-center">
+            <i class="fas fa-eye mr-2"></i>Mostrar Pagos Completados
         </button>
 
-        <!-- Sección de pagos completados que se oculta inicialmente -->
         <div id="completed-payments-section" class="hidden mt-4">
             <h2 class="text-lg font-bold">Pagos Completados</h2>
             <table class="w-full border">
@@ -64,8 +65,14 @@
             <div class="bg-white p-6 rounded shadow-md w-full sm:max-w-sm">
                 <h2 id="payment-modal-label" class="text-xl font-semibold mb-4">Realizar Pago</h2>
                 <input type="number" id="payment-amount" placeholder="Monto a pagar" class="border p-2 rounded w-full mb-2" aria-label="Monto a pagar">
-                <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full" aria-label="Confirmar pago">Confirmar Pago</button>
-                <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2" aria-label="Cerrar modal">Cancelar</button>
+                <!-- Botón de confirmar pago reemplazado por icono -->
+                <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full flex items-center justify-center">
+                    <i class="fas fa-check mr-2"></i>Confirmar Pago
+                </button>
+                <!-- Botón de cancelar reemplazado por icono -->
+                <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2 flex items-center justify-center">
+                    <i class="fas fa-times mr-2"></i>Cancelar
+                </button>
             </div>
         </div>
     </div>
