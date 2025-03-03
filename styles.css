@@ -16,6 +16,12 @@ body {
     color: #333;
 }
 
+/* Contenedor de la tabla */
+.table-container {
+    overflow-x: auto; /* Permite el desplazamiento horizontal */
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Tabla */
 table {
     width: 100%;
@@ -152,6 +158,11 @@ button:focus {
     form {
         padding: 1rem;
     }
+
+    /* Ajustar el contenedor de la tabla en pantallas pequeñas */
+    .table-container {
+        overflow-x: auto; /* Permite el desplazamiento horizontal */
+    }
 }
 
 /* Pantallas muy pequeñas */
@@ -176,5 +187,10 @@ button:focus {
 
     table {
         font-size: 0.9rem;
+    }
+
+    /* Ajustes finales para la tabla */
+    .table-container {
+        overflow-x: auto;
     }
 }
