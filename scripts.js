@@ -2,11 +2,8 @@ let payments = JSON.parse(localStorage.getItem("payments")) || [];
 let completedPayments = JSON.parse(localStorage.getItem("completedPayments")) || [];
 const paymentList = document.getElementById("payment-list");
 const completedPaymentsList = document.getElementById("completed-payments-list");
+const completedPaymentsSection = document.getElementById("completed-payments-section");
 const totalAmountElement = document.getElementById("total-amount");
-const progressBar = document.getElementById("progress-bar");
-const pendingAmountElement = document.getElementById("pending-amount");
-const paidAmountElement = document.getElementById("paid-amount");
-const totalAmountSummary = document.getElementById("total-amount-summary");
 
 let currentPaymentId = null;
 
@@ -59,6 +56,7 @@ function renderPayments() {
     });
 
     Object.values(groupedPayments).forEach(p => {
+        let progress = (p.paid / p.totalAmount) * 100; // Calculamos el porcentaje de pago
         paymentList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
@@ -67,7 +65,7 @@ function renderPayments() {
                 <td class="border p-2">$${p.pending}</td>
                 <td class="border p-2">
                     <button onclick="openPaymentModal(${p.id}, ${p.pending})" class="bg-green-500 text-white p-1 rounded">Pagar</button>
-                    <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Cuotas</button>
+                    <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Cuotas</i></button>
                     <button onclick="deletePayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
                 </td>
             </tr>
@@ -77,6 +75,14 @@ function renderPayments() {
                         <strong>Cuotas:</strong>
                         <ul id="installment-list-${p.id}"></ul>
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: ${progress}%;"></div>
+                    </div>
+                    <p class="text-sm text-center">${progress.toFixed(2)}% Pagado</p>
                 </td>
             </tr>
         `;
@@ -95,71 +101,6 @@ function renderPayments() {
     });
 
     totalAmountElement.textContent = total.toFixed(2);
-    updatePaymentSummary();
-    renderPaymentChart();
-    updateProgressBar();
-}
-
-function updatePaymentSummary() {
-    let totalPaid = 0;
-    let totalPending = 0;
-    let totalAmount = 0;
-
-    payments.forEach(payment => {
-        totalAmount += payment.totalAmount;
-        totalPaid += payment.paid;
-        totalPending += payment.pending;
-    });
-
-    pendingAmountElement.textContent = `$${totalPending.toFixed(2)}`;
-    paidAmountElement.textContent = `$${totalPaid.toFixed(2)}`;
-    totalAmountSummary.textContent = `$${totalAmount.toFixed(2)}`;
-}
-
-function updateProgressBar() {
-    let totalPaid = 0;
-    let totalAmount = 0;
-
-    payments.forEach(payment => {
-        totalAmount += payment.totalAmount;
-        totalPaid += payment.paid;
-    });
-
-    let percentage = (totalPaid / totalAmount) * 100;
-    progressBar.style.width = `${percentage.toFixed(2)}%`;
-    progressBar.textContent = `${percentage.toFixed(2)}%`;
-}
-
-function renderPaymentChart() {
-    let totalPaid = 0;
-    let totalPending = 0;
-
-    payments.forEach(payment => {
-        totalPaid += payment.paid;
-        totalPending += payment.pending;
-    });
-
-    const ctx = document.getElementById('paymentChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Pagado', 'Pendiente'],
-            datasets: [{
-                label: 'Monto',
-                data: [totalPaid, totalPending],
-                backgroundColor: ['#4caf50', '#f44336'],
-                borderColor: ['#388e3c', '#d32f2f'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        });
 }
 
 function toggleInstallments(paymentId) {
@@ -234,6 +175,10 @@ function deletePayment(paymentId) {
 function deleteCompletedPayment(paymentId) {
     completedPayments = completedPayments.filter(p => p.id !== paymentId);
     saveAndRender();
+}
+
+function toggleCompletedPayments() {
+    completedPaymentsSection.classList.toggle("hidden");
 }
 
 function saveAndRender() {
