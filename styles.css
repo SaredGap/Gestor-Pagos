@@ -18,24 +18,26 @@ body {
 
 /* Contenedor de la tabla */
 .table-container {
-    overflow-x: auto; /* Permite el desplazamiento horizontal */
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    max-width: 100%;
 }
 
 /* Tabla */
 table {
     width: 100%;
-    overflow-x: auto; /* Para permitir desplazamiento */
+    overflow-x: auto; /* Permite el desplazamiento horizontal */
     display: block;
     margin-bottom: 2rem;
-    table-layout: fixed; /* Asegura que las celdas tengan un ancho fijo */
+    table-layout: fixed; /* Controla la disposición de las celdas */
 }
 
 th, td {
     padding: 1rem;
     text-align: left;
     border: 1px solid #ddd;
-    word-wrap: break-word; /* Evita desbordes en celdas */
+    word-wrap: break-word; /* Evita que el texto se desborde */
+    max-width: 200px; /* Limita el ancho máximo de cada celda */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
