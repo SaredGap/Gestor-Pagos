@@ -136,11 +136,12 @@ function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
     const paymentMethod = document.getElementById("payment-method").value;
 
+    // Validación de campos antes de proceder
     if (isNaN(amountToPay) || amountToPay <= 0) {
         alert("Por favor, ingresa un monto válido.");
         return;
     }
-    
+
     if (!paymentMethod) {
         alert("Por favor, selecciona un método de pago.");
         return;
