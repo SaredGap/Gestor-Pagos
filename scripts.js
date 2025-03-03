@@ -1,17 +1,13 @@
-const payments = JSON.parse(localStorage.getItem("payments")) || [];
-const completedPayments = JSON.parse(localStorage.getItem("completedPayments")) || [];
+let payments = JSON.parse(localStorage.getItem("payments")) || [];
+let completedPayments = JSON.parse(localStorage.getItem("completedPayments")) || [];
+const paymentList = document.getElementById("payment-list");
+const completedPaymentsList = document.getElementById("completed-payments-list");
+const completedPaymentsSection = document.getElementById("completed-payments-section");
+const totalAmountElement = document.getElementById("total-amount");
+
 let currentPaymentId = null;
 
-document.getElementById("payment-form").addEventListener("submit", addPayment);
-document.getElementById("confirm-payment").addEventListener("click", confirmPayment);
-
-function saveAndRender() {
-    localStorage.setItem("payments", JSON.stringify(payments));
-    localStorage.setItem("completedPayments", JSON.stringify(completedPayments));
-    renderPayments();
-}
-
-function addPayment(event) {
+document.getElementById("payment-form").addEventListener("submit", function(event) {
     event.preventDefault();
     const concept = document.getElementById("concept").value.trim();
     const amount = parseFloat(document.getElementById("amount").value);
@@ -23,8 +19,8 @@ function addPayment(event) {
         return;
     }
 
-    const paymentId = Date.now();
-    const installmentAmount = parseFloat((amount / installments).toFixed(2));
+    let paymentId = new Date().getTime();
+    let installmentAmount = parseFloat((amount / installments).toFixed(2));
 
     for (let i = 1; i <= installments; i++) {
         payments.push({
@@ -41,37 +37,75 @@ function addPayment(event) {
     }
 
     saveAndRender();
-    event.target.reset();
-}
+    this.reset();
+});
 
 function renderPayments() {
-    const paymentList = document.querySelector("#payment-list tbody");
-    const completedList = document.querySelector("#completed-payments tbody");
     paymentList.innerHTML = "";
-    completedList.innerHTML = "";
+    completedPaymentsList.innerHTML = "";
+    let total = 0;
+    let groupedPayments = {};
 
     payments.forEach(p => {
+        total += p.amount;
+        if (!groupedPayments[p.id]) {
+            groupedPayments[p.id] = { ...p, paid: 0, pending: 0 };
+        }
+        groupedPayments[p.id].paid += p.paid;
+        groupedPayments[p.id].pending += p.pending;
+    });
+
+    Object.values(groupedPayments).forEach(p => {
         paymentList.innerHTML += `
             <tr>
-                <td>${p.concept}</td>
-                <td>$${p.totalAmount}</td>
-                <td>$${p.paid.toFixed(2)}</td>
-                <td>$${p.pending.toFixed(2)}</td>
-                <td>
-                    <button onclick="openPaymentModal(${p.id}, ${p.pending})">💰 Pagar</button>
-                    <button onclick="deletePayment(${p.id})">❌ Eliminar</button>
+                <td class="border p-2">${p.concept}</td>
+                <td class="border p-2">$${p.totalAmount}</td>
+                <td class="border p-2">$${p.paid}</td>
+                <td class="border p-2">$${p.pending}</td>
+                <td class="border p-2">
+                    <button onclick="openPaymentModal(${p.id}, ${p.pending})" class="bg-green-500 text-white p-1 rounded">Pagar</button>
+                    <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Ver Cuotas</button>
+                    <button onclick="deletePayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
+                </td>
+            </tr>
+            <tr id="installments-${p.id}" class="hidden">
+                <td colspan="5">
+                    <div class="p-2 bg-gray-100 rounded">
+                        <strong>Cuotas:</strong>
+                        <ul id="installment-list-${p.id}"></ul>
+                    </div>
                 </td>
             </tr>
         `;
     });
 
     completedPayments.forEach(p => {
-        completedList.innerHTML += `
+        completedPaymentsList.innerHTML += `
             <tr>
-                <td>${p.concept}</td>
-                <td>$${p.totalAmount}</td>
-                <td><button onclick="deleteCompletedPayment(${p.id})">🗑️ Eliminar</button></td>
+                <td class="border p-2">${p.concept}</td>
+                <td class="border p-2">$${p.totalAmount}</td>
+                <td class="border p-2">
+                    <button onclick="deleteCompletedPayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
+                </td>
             </tr>
+        `;
+    });
+
+    totalAmountElement.textContent = total.toFixed(2);
+}
+
+function toggleInstallments(paymentId) {
+    const installmentDiv = document.getElementById(`installments-${paymentId}`);
+    installmentDiv.classList.toggle("hidden");
+    renderInstallments(paymentId);
+}
+
+function renderInstallments(paymentId) {
+    const list = document.getElementById(`installment-list-${paymentId}`);
+    list.innerHTML = "";
+    payments.filter(p => p.id === paymentId).forEach(p => {
+        list.innerHTML += `
+            <li>Cuota ${p.installment}/${p.totalInstallments}: Pagado $${p.paid.toFixed(2)}, Pendiente $${p.pending.toFixed(2)}</li>
         `;
     });
 }
@@ -88,6 +122,7 @@ function closeModal() {
 
 function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
+
     if (isNaN(amountToPay) || amountToPay <= 0) {
         alert("Por favor, ingresa un monto válido.");
         return;
@@ -116,7 +151,7 @@ function confirmPayment() {
             concept: selectedPayments[0].concept,
             totalAmount: selectedPayments[0].totalAmount
         });
-        payments.splice(payments.findIndex(p => p.id === currentPaymentId), selectedPayments.length);
+        payments = payments.filter(p => p.id !== currentPaymentId);
     }
 
     saveAndRender();
@@ -124,13 +159,23 @@ function confirmPayment() {
 }
 
 function deletePayment(paymentId) {
-    payments.splice(payments.findIndex(p => p.id === paymentId), 1);
+    payments = payments.filter(p => p.id !== paymentId);
     saveAndRender();
 }
 
 function deleteCompletedPayment(paymentId) {
-    completedPayments.splice(completedPayments.findIndex(p => p.id === paymentId), 1);
+    completedPayments = completedPayments.filter(p => p.id !== paymentId);
     saveAndRender();
 }
 
-saveAndRender();
+function toggleCompletedPayments() {
+    completedPaymentsSection.classList.toggle("hidden");
+}
+
+function saveAndRender() {
+    localStorage.setItem("payments", JSON.stringify(payments));
+    localStorage.setItem("completedPayments", JSON.stringify(completedPayments));
+    renderPayments();
+}
+
+renderPayments();
