@@ -3,54 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Pagos</title>
-    <script defer src="script.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <title>Gestor de Pagos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 p-4">
 
-    <h1>Gestión de Pagos</h1>
+    <!-- Contenedor principal con un max-width para dispositivos grandes y se ajusta en pantallas pequeñas -->
+    <div class="max-w-full mx-auto bg-white p-4 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4">Gestor de Pagos</h1>
 
-    <form id="payment-form">
-        <input type="text" id="concept" placeholder="Concepto" required>
-        <input type="number" id="amount" placeholder="Monto" required>
-        <input type="number" id="installments" placeholder="Cuotas" required>
-        <input type="date" id="date" required>
-        <button type="submit">Agregar Pago</button>
-    </form>
+        <form id="payment-form" class="mb-4">
+            <!-- Campos de entrada adaptables al 100% del ancho -->
+            <input type="text" id="concept" placeholder="Concepto" class="border p-2 rounded w-full mb-2" aria-label="Concepto del pago">
+            <input type="number" id="amount" placeholder="Monto" class="border p-2 rounded w-full mb-2" aria-label="Monto del pago">
+            <input type="number" id="installments" placeholder="Número de Cuotas" class="border p-2 rounded w-full mb-2" aria-label="Número de cuotas">
+            <input type="date" id="date" class="border p-2 rounded w-full mb-2" aria-label="Fecha del pago">
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full" aria-label="Agregar pago">Agregar Pago</button>
+        </form>
 
-    <h2>Pagos Pendientes</h2>
-    <table id="payment-list">
-        <thead>
-            <tr>
-                <th>Concepto</th>
-                <th>Total</th>
-                <th>Pagado</th>
-                <th>Pendiente</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
 
-    <h2>Pagos Completados</h2>
-    <table id="completed-payments">
-        <thead>
-            <tr>
-                <th>Concepto</th>
-                <th>Total</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <!-- Tabla con un borde para el diseño -->
+        <table class="w-full border-collapse border border-gray-300 mt-4">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Concepto</th>
+                    <th class="border p-2">Monto</th>
+                    <th class="border p-2">Pagado</th>
+                    <th class="border p-2">Pendiente</th>
+                    <th class="border p-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="payment-list"></tbody>
+        </table>
 
-    <!-- Modal para pago -->
-    <div id="payment-modal" class="hidden">
-        <input type="number" id="payment-amount" placeholder="Monto a pagar">
-        <button id="confirm-payment">Pagar</button>
-        <button onclick="closeModal()">Cerrar</button>
+        <!-- Botón para mostrar pagos completados -->
+        <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded w-full mt-4" aria-label="Mostrar pagos completados">
+            Mostrar Pagos Completados
+        </button>
+
+        <!-- Sección de pagos completados que se oculta inicialmente -->
+        <div id="completed-payments-section" class="hidden mt-4">
+            <h2 class="text-lg font-bold">Pagos Completados</h2>
+            <table class="w-full border">
+                <thead>
+                    <tr>
+                        <th class="border p-2">Concepto</th>
+                        <th class="border p-2">Monto Total</th>
+                        <th class="border p-2">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="completed-payments-list"></tbody>
+            </table>
+        </div>
+
+        <!-- Modal para realizar el pago -->
+        <div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="payment-modal-label" role="dialog" aria-hidden="true">
+            <div class="bg-white p-6 rounded shadow-md w-full sm:max-w-sm">
+                <h2 id="payment-modal-label" class="text-xl font-semibold mb-4">Realizar Pago</h2>
+                <input type="number" id="payment-amount" placeholder="Monto a pagar" class="border p-2 rounded w-full mb-2" aria-label="Monto a pagar">
+                <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full" aria-label="Confirmar pago">Confirmar Pago</button>
+                <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2" aria-label="Cerrar modal">Cancelar</button>
+            </div>
+        </div>
     </div>
 
+    <script src="scripts.js"></script>
 </body>
 </html>
