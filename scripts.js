@@ -12,22 +12,20 @@ document.getElementById("payment-form").addEventListener("submit", function(even
     const concept = document.getElementById("concept").value.trim();
     const amount = parseFloat(document.getElementById("amount").value);
     const installments = parseInt(document.getElementById("installments").value);
-    const date = document.getElementById("date").value;
+    const startDate = document.getElementById("date").value;
 
-    if (!concept || isNaN(amount) || isNaN(installments) || !date || amount <= 0 || installments <= 0) {
+    if (!concept || isNaN(amount) || isNaN(installments) || !startDate || amount <= 0 || installments <= 0) {
         alert("Por favor, completa todos los campos correctamente.");
         return;
     }
 
     let paymentId = new Date().getTime();
     let installmentAmount = parseFloat((amount / installments).toFixed(2));
+    let currentDate = new Date(startDate);
 
-    // Convertir la fecha de inicio a un objeto Date
-    let startDate = new Date(date);
-
-    for (let i = 0; i < installments; i++) {
-        let installmentDate = new Date(startDate);
-        installmentDate.setMonth(startDate.getMonth() + i);  // Ajustamos el mes por cuota
+    for (let i = 1; i <= installments; i++) {
+        let paymentDate = new Date(currentDate);
+        paymentDate.setMonth(paymentDate.getMonth() + i - 1); // Sumamos un mes por cada cuota
 
         payments.push({
             id: paymentId,
@@ -36,8 +34,8 @@ document.getElementById("payment-form").addEventListener("submit", function(even
             amount: installmentAmount,
             paid: 0,
             pending: installmentAmount,
-            date: installmentDate.toISOString().split('T')[0],  // Guardamos la fecha en formato YYYY-MM-DD
-            installment: i + 1,
+            date: paymentDate.toISOString().split('T')[0], // Fecha en formato YYYY-MM-DD
+            installment: i,
             totalInstallments: installments
         });
     }
@@ -77,10 +75,19 @@ function renderPayments() {
             </tr>
             <tr id="installments-${p.id}" class="hidden">
                 <td colspan="5">
-                    <div class="p-2 bg-gray-100 rounded">
-                        <strong>Cuotas:</strong>
-                        <ul id="installment-list-${p.id}"></ul>
-                    </div>
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr>
+                                <th class="border p-2">Cuota</th>
+                                <th class="border p-2">Fecha de Pago</th>
+                                <th class="border p-2">Monto Pagado</th>
+                                <th class="border p-2">Monto Pendiente</th>
+                            </tr>
+                        </thead>
+                        <tbody id="installment-list-${p.id}">
+                            <!-- Las cuotas se agregarán aquí -->
+                        </tbody>
+                    </table>
                 </td>
             </tr>
             <tr>
@@ -122,7 +129,12 @@ function renderInstallments(paymentId) {
     list.innerHTML = "";
     payments.filter(p => p.id === paymentId).forEach(p => {
         list.innerHTML += `
-            <li>Cuota ${p.installment}/${p.totalInstallments}: Fecha ${p.date}, Pagado $${p.paid.toFixed(2)}, Pendiente $${p.pending.toFixed(2)}</li>
+            <tr>
+                <td class="border p-2">Cuota ${p.installment}/${p.totalInstallments}</td>
+                <td class="border p-2">${p.date}</td>
+                <td class="border p-2">$${p.paid.toFixed(2)}</td>
+                <td class="border p-2">$${p.pending.toFixed(2)}</td>
+            </tr>
         `;
     });
 }
