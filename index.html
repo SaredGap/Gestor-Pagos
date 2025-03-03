@@ -23,19 +23,21 @@
 
         <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
 
-        <!-- Tabla con un borde para el diseño -->
-        <table class="table-container w-full border-collapse border border-gray-300 mt-4">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border p-2">Concepto</th>
-                    <th class="border p-2">Monto</th>
-                    <th class="border p-2">Pagado</th>
-                    <th class="border p-2">Pendiente</th>
-                    <th class="border p-2">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="payment-list"></tbody>
-        </table>
+        <!-- Contenedor de la tabla con desplazamiento horizontal -->
+        <div class="table-container overflow-x-auto mt-4">
+            <table class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border p-2">Concepto</th>
+                        <th class="border p-2">Monto</th>
+                        <th class="border p-2">Pagado</th>
+                        <th class="border p-2">Pendiente</th>
+                        <th class="border p-2">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="payment-list"></tbody>
+            </table>
+        </div>
 
         <!-- Botón para mostrar pagos completados -->
         <button onclick="toggleCompletedPayments()" class="bg-purple-500 text-white p-2 rounded w-full mt-4" aria-label="Mostrar pagos completados">
