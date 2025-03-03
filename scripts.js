@@ -56,6 +56,7 @@ function renderPayments() {
     });
 
     Object.values(groupedPayments).forEach(p => {
+        let progress = (p.paid / p.totalAmount) * 100; // Calculamos el porcentaje de pago
         paymentList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
@@ -64,7 +65,7 @@ function renderPayments() {
                 <td class="border p-2">$${p.pending}</td>
                 <td class="border p-2">
                     <button onclick="openPaymentModal(${p.id}, ${p.pending})" class="bg-green-500 text-white p-1 rounded">Pagar</button>
-                    <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Coutas</i></button>
+                    <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Cuotas</i></button>
                     <button onclick="deletePayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
                 </td>
             </tr>
@@ -74,6 +75,14 @@ function renderPayments() {
                         <strong>Cuotas:</strong>
                         <ul id="installment-list-${p.id}"></ul>
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: ${progress}%;"></div>
+                    </div>
+                    <p class="text-sm text-center">${progress.toFixed(2)}% Pagado</p>
                 </td>
             </tr>
         `;
