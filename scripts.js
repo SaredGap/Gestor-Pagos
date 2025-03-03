@@ -22,7 +22,13 @@ document.getElementById("payment-form").addEventListener("submit", function(even
     let paymentId = new Date().getTime();
     let installmentAmount = parseFloat((amount / installments).toFixed(2));
 
-    for (let i = 1; i <= installments; i++) {
+    // Convertir la fecha de inicio a un objeto Date
+    let startDate = new Date(date);
+
+    for (let i = 0; i < installments; i++) {
+        let installmentDate = new Date(startDate);
+        installmentDate.setMonth(startDate.getMonth() + i);  // Ajustamos el mes por cuota
+
         payments.push({
             id: paymentId,
             concept,
@@ -30,8 +36,8 @@ document.getElementById("payment-form").addEventListener("submit", function(even
             amount: installmentAmount,
             paid: 0,
             pending: installmentAmount,
-            date,
-            installment: i,
+            date: installmentDate.toISOString().split('T')[0],  // Guardamos la fecha en formato YYYY-MM-DD
+            installment: i + 1,
             totalInstallments: installments
         });
     }
@@ -116,7 +122,7 @@ function renderInstallments(paymentId) {
     list.innerHTML = "";
     payments.filter(p => p.id === paymentId).forEach(p => {
         list.innerHTML += `
-            <li>Cuota ${p.installment}/${p.totalInstallments}: Pagado $${p.paid.toFixed(2)}, Pendiente $${p.pending.toFixed(2)}</li>
+            <li>Cuota ${p.installment}/${p.totalInstallments}: Fecha ${p.date}, Pagado $${p.paid.toFixed(2)}, Pendiente $${p.pending.toFixed(2)}</li>
         `;
     });
 }
@@ -179,7 +185,6 @@ function confirmPayment() {
     saveAndRender();
     closeModal();
 }
-
 
 function deletePayment(paymentId) {
     payments = payments.filter(p => p.id !== paymentId);
