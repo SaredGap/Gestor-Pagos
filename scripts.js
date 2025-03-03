@@ -93,6 +93,8 @@ function renderPayments() {
             <tr>
                 <td class="border p-2">${p.concept}</td>
                 <td class="border p-2">$${p.totalAmount}</td>
+                <td class="border p-2">${p.date}</td>
+                <td class="border p-2">${p.paymentMethod}</td>
                 <td class="border p-2">
                     <button onclick="deleteCompletedPayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
                 </td>
@@ -131,6 +133,7 @@ function closeModal() {
 
 function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
+    const paymentMethod = prompt("Ingresa el método de pago (ej. Tarjeta, Transferencia, etc.):");
 
     if (isNaN(amountToPay) || amountToPay <= 0) {
         alert("Por favor, ingresa un monto válido.");
@@ -158,7 +161,9 @@ function confirmPayment() {
         completedPayments.push({
             id: currentPaymentId,
             concept: selectedPayments[0].concept,
-            totalAmount: selectedPayments[0].totalAmount
+            totalAmount: selectedPayments[0].totalAmount,
+            date: selectedPayments[0].date,
+            paymentMethod: paymentMethod
         });
         payments = payments.filter(p => p.id !== currentPaymentId);
     }
