@@ -14,6 +14,10 @@
 
     <div class="max-w-full mx-auto bg-white p-4 rounded-lg shadow-md">
         <h1 class="text-2xl font-bold mb-4">Gestor de Pagos</h1>
+        <button onclick="openAppHelpModal()" class="bg-gray-300 text-gray-700 p-2 rounded-full fixed top-4 right-4 shadow-md">
+        <i class="fas fa-question-circle"></i> Ayuda
+        </button>
+
 
         <!-- Formulario para agregar pago -->
         <form id="payment-form" class="mb-4">
@@ -94,6 +98,69 @@
         </div>
     </div>
 </div>
+
+        <div id="app-help-modal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+    <div class="bg-white p-5 rounded-lg w-96 max-w-full">
+        <h3 class="text-xl font-semibold mb-4">📖 Guía de Uso - Gestor de Pagos</h3>
+        <div class="overflow-y-auto max-h-80">
+
+            <p><b>📌 Objetivo:</b> Esta aplicación te permite gestionar pagos, dividir montos en cuotas y registrar métodos de pago.</p>
+
+            <hr class="my-2">
+
+            <h4 class="font-semibold mt-2">📝 Agregar un Pago</h4>
+            <p>1. Introduce el <b>concepto</b> (ejemplo: "Renta").</p>
+            <p>2. Especifica el <b>monto</b> total.</p>
+            <p>3. Si el pago se divide, ingresa el <b>número de cuotas</b>.</p>
+            <p>4. Selecciona la <b>fecha de inicio</b>.</p>
+            <p>5. Pulsa <b>"Agregar Pago"</b> para registrarlo.</p>
+
+            <hr class="my-2">
+
+            <h4 class="font-semibold mt-2">💰 Estado de los Pagos</h4>
+            <p>- En la tabla principal puedes ver el <b>total pagado</b> y el <b>saldo pendiente</b>.</p>
+            <p>- Haz clic en el botón de pago 💵 para registrar un abono.</p>
+
+            <hr class="my-2">
+
+            <h4 class="font-semibold mt-2">📅 Cuotas Automáticas</h4>
+            <p>Si un pago se divide en cuotas, se generan fechas de pago automáticamente cada mes.</p>
+            <p>Ejemplo: Un pago de $2000 en 4 cuotas iniciado el <b>04/03/2025</b> tendrá las siguientes fechas:</p>
+            <ul class="list-disc ml-5">
+                <li>📅 04/03/2025</li>
+                <li>📅 04/04/2025</li>
+                <li>📅 04/05/2025</li>
+                <li>📅 04/06/2025</li>
+            </ul>
+
+            <hr class="my-2">
+
+            <h4 class="font-semibold mt-2">✔️ Pagos Completados</h4>
+            <p>Pulsa <b>"Mostrar Pagos Completados"</b> para ver pagos ya liquidados.</p>
+
+            <hr class="my-2">
+
+            <h4 class="font-semibold mt-2">⚙️ Métodos de Pago</h4>
+            <p>Al registrar un pago, elige una opción:</p>
+            <ul class="list-disc ml-5">
+                <li>💳 Tarjeta</li>
+                <li>💸 Efectivo</li>
+                <li>🏦 Transferencia</li>
+                <li>🔄 Otro</li>
+            </ul>
+
+            <hr class="my-2">
+
+            <h4 class="font-semibold mt-2">📊 Análisis de Pagos</h4>
+            <p>Se mostrarán gráficos de pagos futuros y saldos pendientes (próxima actualización 🔜).</p>
+
+        </div>
+        <div class="flex justify-end mt-4">
+            <button onclick="closeAppHelpModal()" class="bg-blue-500 text-white p-2 rounded">Entendido</button>
+        </div>
+    </div>
+</div>
+
 
 
     <script src="scripts.js"></script>
