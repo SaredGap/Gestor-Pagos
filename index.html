@@ -53,20 +53,23 @@
         </button>
 
         <div id="completed-payments-section" class="hidden mt-4">
-            <h2 class="text-lg font-bold">Pagos Completados</h2>
-              <table class="w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr>
-                        <th class="border p-2">Concepto</th>
-                        <th class="border p-2">Monto Total</th>
-                        <th class="border p-2">Fecha</th>
-                        <th class="border p-2">Método de Pago</th>
-                        <th class="border p-2">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="completed-payments-list"></tbody>
-            </table>
-        </div>
+    <h2 class="text-lg font-bold">Pagos Completados</h2>
+    <div class="table-container">
+        <table class="w-full border">
+            <thead>
+                <tr>
+                    <th class="border p-2">Concepto</th>
+                    <th class="border p-2">Monto Total</th>
+                    <th class="border p-2">Fecha</th>
+                    <th class="border p-2">Método de Pago</th>
+                    <th class="border p-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="completed-payments-list"></tbody>
+        </table>
+    </div>
+</div>
+
 
        <!-- Modal de Pago -->
 <div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
