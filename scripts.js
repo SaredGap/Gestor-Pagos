@@ -63,9 +63,9 @@ function renderPayments() {
                 <td class="border p-2">$${p.paid}</td>
                 <td class="border p-2">$${p.pending}</td>
                 <td class="border p-2">
-                    <button onclick="openPaymentModal(${p.id}, ${p.pending})" class="bg-green-500 text-white p-1 rounded"><i class="fas fa-dollar-sign mr-2"></i></button>
-                    <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded"><i class="fas fa-eye mr-2"></i></button>
-                    <button onclick="deletePayment(${p.id})" class="bg-red-500 text-white p-1 rounded"><i class="fas fa-trash mr-2"></button>
+                    <button onclick="openPaymentModal(${p.id}, ${p.pending})" class="bg-green-500 text-white p-1 rounded">Pagar></button>
+                    <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Coutas</i></button>
+                    <button onclick="deletePayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
                 </td>
             </tr>
             <tr id="installments-${p.id}" class="hidden">
