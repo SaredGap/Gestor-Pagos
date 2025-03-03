@@ -141,16 +141,23 @@ function confirmPayment() {
         }
     });
 
-    let totalAmount = selectedPayments[0]?.totalAmount || 0;
+    // Verificar si todas las cuotas han sido pagadas
+    let allPaid = selectedPayments.every(p => p.pending === 0);
 
-    if (totalPaid >= totalAmount) {
-        completedPayments.push(selectedPayments[0]);
+    if (allPaid) {
+        completedPayments.push({
+            id: currentPaymentId,
+            concept: selectedPayments[0].concept,
+            totalAmount: selectedPayments[0].totalAmount
+        });
+
         payments = payments.filter(p => p.id !== currentPaymentId);
     }
 
     saveAndRender();
     closeModal();
 }
+
 
 function deletePayment(paymentId) {
     payments = payments.filter(p => p.id !== paymentId);
