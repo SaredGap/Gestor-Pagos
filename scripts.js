@@ -9,34 +9,35 @@ let currentPaymentId = null;
 
 document.getElementById("payment-form").addEventListener("submit", function(event) {
     event.preventDefault();
-    const concept = document.getElementById("concept").value;
+    const concept = document.getElementById("concept").value.trim();
     const amount = parseFloat(document.getElementById("amount").value);
     const installments = parseInt(document.getElementById("installments").value);
     const date = document.getElementById("date").value;
 
-    if (concept && amount && date && installments > 0) {
-        let paymentId = new Date().getTime();
-        let installmentAmount = amount / installments;
-
-        for (let i = 1; i <= installments; i++) {
-            payments.push({
-                id: paymentId,
-                concept,
-                totalAmount: amount,
-                amount: installmentAmount,
-                paid: 0,
-                pending: installmentAmount,
-                date,
-                installment: i,
-                totalInstallments: installments
-            });
-        }
-
-        saveAndRender();
-        this.reset(); // Limpiar los campos después de agregar un pago
-    } else {
+    if (!concept || isNaN(amount) || isNaN(installments) || !date || amount <= 0 || installments <= 0) {
         alert("Por favor, completa todos los campos correctamente.");
+        return;
     }
+
+    let paymentId = new Date().getTime();
+    let installmentAmount = parseFloat((amount / installments).toFixed(2));
+
+    for (let i = 1; i <= installments; i++) {
+        payments.push({
+            id: paymentId,
+            concept,
+            totalAmount: amount,
+            amount: installmentAmount,
+            paid: 0,
+            pending: installmentAmount,
+            date,
+            installment: i,
+            totalInstallments: installments
+        });
+    }
+
+    saveAndRender();
+    this.reset();
 });
 
 function renderPayments() {
@@ -62,7 +63,7 @@ function renderPayments() {
                 <td class="border p-2">$${p.paid}</td>
                 <td class="border p-2">$${p.pending}</td>
                 <td class="border p-2">
-                    <button onclick="openPaymentModal(${p.id})" class="bg-green-500 text-white p-1 rounded">Pagar</button>
+                    <button onclick="openPaymentModal(${p.id}, ${p.pending})" class="bg-green-500 text-white p-1 rounded">Pagar</button>
                     <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Ver Cuotas</button>
                     <button onclick="deletePayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
                 </td>
@@ -90,7 +91,7 @@ function renderPayments() {
         `;
     });
 
-    totalAmountElement.textContent = total;
+    totalAmountElement.textContent = total.toFixed(2);
 }
 
 function toggleInstallments(paymentId) {
@@ -102,18 +103,17 @@ function toggleInstallments(paymentId) {
 function renderInstallments(paymentId) {
     const list = document.getElementById(`installment-list-${paymentId}`);
     list.innerHTML = "";
-    payments
-        .filter(p => p.id === paymentId)
-        .forEach(p => {
-            list.innerHTML += `
-                <li>Cuota ${p.installment}/${p.totalInstallments}: Pagado $${p.paid}, Pendiente $${p.pending}</li>
-            `;
-        });
+    payments.filter(p => p.id === paymentId).forEach(p => {
+        list.innerHTML += `
+            <li>Cuota ${p.installment}/${p.totalInstallments}: Pagado $${p.paid.toFixed(2)}, Pendiente $${p.pending.toFixed(2)}</li>
+        `;
+    });
 }
 
-function openPaymentModal(paymentId) {
+function openPaymentModal(paymentId, pendingAmount) {
     currentPaymentId = paymentId;
     document.getElementById("payment-modal").classList.remove("hidden");
+    document.getElementById("payment-amount").value = pendingAmount.toFixed(2);
 }
 
 function closeModal() {
@@ -129,7 +129,12 @@ function confirmPayment() {
     }
 
     let selectedPayments = payments.filter(p => p.id === currentPaymentId);
-    let totalPaid = 0;
+    let totalPending = selectedPayments.reduce((sum, p) => sum + p.pending, 0);
+
+    if (amountToPay > totalPending) {
+        alert("El monto ingresado supera la cantidad pendiente.");
+        return;
+    }
 
     selectedPayments.forEach(p => {
         if (amountToPay > 0) {
@@ -137,27 +142,21 @@ function confirmPayment() {
             p.paid += paymentAmount;
             p.pending -= paymentAmount;
             amountToPay -= paymentAmount;
-            totalPaid += paymentAmount;
         }
     });
 
-    // Verificar si todas las cuotas han sido pagadas
-    let allPaid = selectedPayments.every(p => p.pending === 0);
-
-    if (allPaid) {
+    if (selectedPayments.every(p => p.pending === 0)) {
         completedPayments.push({
             id: currentPaymentId,
             concept: selectedPayments[0].concept,
             totalAmount: selectedPayments[0].totalAmount
         });
-
         payments = payments.filter(p => p.id !== currentPaymentId);
     }
 
     saveAndRender();
     closeModal();
 }
-
 
 function deletePayment(paymentId) {
     payments = payments.filter(p => p.id !== paymentId);
