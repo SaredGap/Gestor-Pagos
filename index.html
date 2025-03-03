@@ -74,20 +74,30 @@
             </table>
         </div>
 
-        <!-- Modal para realizar el pago -->
-        <div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="payment-modal-label" role="dialog" aria-hidden="true">
-            <div class="bg-white p-6 rounded shadow-md w-full sm:max-w-sm">
-                <h2 id="payment-modal-label" class="text-xl font-semibold mb-4">Realizar Pago</h2>
-                <input type="number" id="payment-amount" placeholder="Monto a pagar" class="border p-2 rounded w-full mb-2" aria-label="Monto a pagar">
-                <button onclick="confirmPayment()" class="bg-green-500 text-white p-2 rounded w-full flex items-center justify-center">
-                    <i class="fas fa-check mr-2"></i>Confirmar Pago
-                </button>
-                <button onclick="closeModal()" class="bg-red-500 text-white p-2 rounded w-full mt-2 flex items-center justify-center">
-                    <i class="fas fa-times mr-2"></i>Cancelar
-                </button>
-            </div>
+       <!-- Modal de Pago -->
+<div id="payment-modal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+    <div class="bg-white p-5 rounded-lg w-96">
+        <h3 class="text-xl font-semibold mb-4">Confirmar Pago</h3>
+        <label for="payment-amount" class="block text-sm font-medium text-gray-700">Monto a Pagar</label>
+        <input type="number" id="payment-amount" class="w-full p-2 mb-4 border rounded" placeholder="Monto a pagar" required>
+        
+        <!-- Nuevo campo: Método de pago -->
+        <label for="payment-method" class="block text-sm font-medium text-gray-700">Método de Pago</label>
+        <select id="payment-method" class="w-full p-2 mb-4 border rounded" required>
+            <option value="" disabled selected>Selecciona un método de pago</option>
+            <option value="Tarjeta">Tarjeta</option>
+            <option value="Transferencia">Transferencia</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Otro">Otro</option>
+        </select>
+        
+        <div class="flex justify-between">
+            <button onclick="closeModal()" class="bg-gray-500 text-white p-2 rounded">Cancelar</button>
+            <button onclick="confirmPayment()" class="bg-blue-500 text-white p-2 rounded">Confirmar</button>
         </div>
     </div>
+</div>
+
 
     <script src="scripts.js"></script>
 </body>
