@@ -55,6 +55,10 @@ td:hover {
     transform: scale(1.02); /* Efecto de hover en celdas */
 }
 
+#completed-payments-section {
+    overflow-x: auto; /* Habilita el desplazamiento horizontal si es necesario */
+}
+
 /* Botones */
 button {
     padding: 0.5rem 1rem;
