@@ -56,7 +56,7 @@ function renderPayments() {
     });
 
     Object.values(groupedPayments).forEach(p => {
-        paymentList.innerHTML += 
+        paymentList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
                 <td class="border p-2">$${p.totalAmount}</td>
@@ -76,11 +76,11 @@ function renderPayments() {
                     </div>
                 </td>
             </tr>
-        ;
+        `;
     });
 
     completedPayments.forEach(p => {
-        completedPaymentsList.innerHTML += 
+        completedPaymentsList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
                 <td class="border p-2">$${p.totalAmount}</td>
@@ -88,25 +88,25 @@ function renderPayments() {
                     <button onclick="deleteCompletedPayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
                 </td>
             </tr>
-        ;
+        `;
     });
 
     totalAmountElement.textContent = total.toFixed(2);
 }
 
 function toggleInstallments(paymentId) {
-    const installmentDiv = document.getElementById(installments-${paymentId});
+    const installmentDiv = document.getElementById(`installments-${paymentId}`);
     installmentDiv.classList.toggle("hidden");
     renderInstallments(paymentId);
 }
 
 function renderInstallments(paymentId) {
-    const list = document.getElementById(installment-list-${paymentId});
+    const list = document.getElementById(`installment-list-${paymentId}`);
     list.innerHTML = "";
     payments.filter(p => p.id === paymentId).forEach(p => {
-        list.innerHTML += 
+        list.innerHTML += `
             <li>Cuota ${p.installment}/${p.totalInstallments}: Pagado $${p.paid.toFixed(2)}, Pendiente $${p.pending.toFixed(2)}</li>
-        ;
+        `;
     });
 }
 
@@ -178,4 +178,4 @@ function saveAndRender() {
     renderPayments();
 }
 
-renderPayments()
+renderPayments();
