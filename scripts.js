@@ -150,6 +150,14 @@ function closeModal() {
     document.getElementById("payment-modal").classList.add("hidden");
 }
 
+function openAppHelpModal() {
+    document.getElementById("app-help-modal").classList.remove("hidden");
+}
+
+function closeAppHelpModal() {
+    document.getElementById("app-help-modal").classList.add("hidden");
+}
+
 function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
     const paymentMethod = document.getElementById("payment-method").value;
