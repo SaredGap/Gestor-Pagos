@@ -142,7 +142,7 @@ function confirmPayment() {
         return;
     }
 
-    if (!paymentMethod) {
+    if (paymentMethod === "") {
         alert("Por favor, selecciona un método de pago.");
         return;
     }
@@ -164,6 +164,7 @@ function confirmPayment() {
         }
     });
 
+    // Si todas las cuotas han sido pagadas, mover el pago a completados
     if (selectedPayments.every(p => p.pending === 0)) {
         completedPayments.push({
             id: currentPaymentId,
@@ -178,6 +179,7 @@ function confirmPayment() {
     saveAndRender();
     closeModal();
 }
+
 
 function deletePayment(paymentId) {
     payments = payments.filter(p => p.id !== paymentId);
