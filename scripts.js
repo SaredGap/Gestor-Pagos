@@ -139,6 +139,25 @@ function renderInstallments(paymentId) {
     });
 }
 
+// Obtener el checkbox, campo de fecha y cuotas
+const paymentDetailsCheckbox = document.getElementById('has-payment-details');
+const firstPaymentDateField = document.getElementById('first-payment-date');
+const installmentsField = document.getElementById('installments');
+
+// Escuchar el cambio del checkbox
+paymentDetailsCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+        // Habilitar ambos campos (fecha y cuotas)
+        firstPaymentDateField.disabled = false;
+        installmentsField.disabled = false;
+    } else {
+        // Deshabilitar ambos campos si el checkbox no está marcado
+        firstPaymentDateField.disabled = true;
+        installmentsField.disabled = true;
+    }
+});
+
+
 function openPaymentModal(paymentId, pendingAmount) {
     currentPaymentId = paymentId;
     document.getElementById("payment-modal").classList.remove("hidden");
