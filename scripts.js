@@ -169,7 +169,7 @@ function confirmPayment() {
     }
 
     if (paymentMethod === "") {
-        alert("Por favor, selecciona un método de pago.");
+        alert("Por favor, selecciona un metodo de pago.");
         return;
     }
 
