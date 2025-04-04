@@ -11,16 +11,16 @@ document.getElementById("payment-form").addEventListener("submit", function(even
     event.preventDefault();
     const concept = document.getElementById("concept").value.trim();
     const amount = parseFloat(document.getElementById("amount").value);
-    const installments = parseInt(document.getElementById("installments").value);
+    const installments = document.getElementById("installments").checked ? parseInt(document.getElementById("installments-quantity").value) : 0; // Controlamos las cuotas si está habilitado
     const startDate = document.getElementById("date").value;
 
-    if (!concept || isNaN(amount) || isNaN(installments) || !startDate || amount <= 0 || installments <= 0) {
+    if (!concept || isNaN(amount) || (installments && isNaN(installments)) || (!startDate && installments > 0) || amount <= 0 || (installments > 0 && installments <= 0)) {
         alert("Por favor, completa todos los campos correctamente.");
         return;
     }
 
     let paymentId = new Date().getTime();
-    let installmentAmount = parseFloat((amount / installments).toFixed(2));
+    let installmentAmount = installments > 0 ? parseFloat((amount / installments).toFixed(2)) : amount;  // Si no hay cuotas, todo se paga como un solo monto
     let currentDate = new Date(startDate);
 
     for (let i = 1; i <= installments; i++) {
@@ -37,6 +37,20 @@ document.getElementById("payment-form").addEventListener("submit", function(even
             date: paymentDate.toISOString().split('T')[0], // Fecha en formato YYYY-MM-DD
             installment: i,
             totalInstallments: installments
+        });
+    }
+
+    if (installments === 0) {  // Si no hay cuotas, agregamos el pago como único
+        payments.push({
+            id: paymentId,
+            concept,
+            totalAmount: amount,
+            amount: amount,
+            paid: 0,
+            pending: amount,
+            date: new Date().toISOString().split('T')[0], // Fecha actual
+            installment: 1,
+            totalInstallments: 1
         });
     }
 
@@ -64,9 +78,9 @@ function renderPayments() {
         paymentList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
-                <td class="border p-2">$${p.totalAmount}</td>
-                <td class="border p-2">$${p.paid}</td>
-                <td class="border p-2">$${p.pending}</td>
+                <td class="border p-2">$${p.totalAmount.toFixed(2)}</td>
+                <td class="border p-2">$${p.paid.toFixed(2)}</td>
+                <td class="border p-2">$${p.pending.toFixed(2)}</td>
                 <td class="border p-2">
                     <button onclick="openPaymentModal(${p.id}, ${p.pending})" class="bg-green-500 text-white p-1 rounded">Pagar</button>
                     <button onclick="toggleInstallments(${p.id})" class="bg-blue-500 text-white p-1 rounded">Cuotas</button>
@@ -105,7 +119,7 @@ function renderPayments() {
         completedPaymentsList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
-                <td class="border p-2">$${p.totalAmount}</td>
+                <td class="border p-2">$${p.totalAmount.toFixed(2)}</td>
                 <td class="border p-2">${p.date}</td>
                 <td class="border p-2">${p.paymentMethod}</td>
                 <td class="border p-2">
@@ -139,56 +153,22 @@ function renderInstallments(paymentId) {
     });
 }
 
-// Obtener el checkbox, campo de fecha y cuotas
-const paymentDetailsCheckbox = document.getElementById('has-payment-details');
-const firstPaymentDateField = document.getElementById('first-payment-date');
-const installmentsField = document.getElementById('installments');
-
-// Escuchar el cambio del checkbox
-paymentDetailsCheckbox.addEventListener('change', function () {
-    if (this.checked) {
-        // Habilitar ambos campos (fecha y cuotas)
-        firstPaymentDateField.disabled = false;
-        installmentsField.disabled = false;
-    } else {
-        // Deshabilitar ambos campos si el checkbox no está marcado
-        firstPaymentDateField.disabled = true;
-        installmentsField.disabled = true;
-    }
-});
-
-
 function openPaymentModal(paymentId, pendingAmount) {
     currentPaymentId = paymentId;
     document.getElementById("payment-modal").classList.remove("hidden");
     document.getElementById("payment-amount").value = pendingAmount.toFixed(2);
-    document.getElementById("payment-method").value = ''; // Limpiar el campo del método de pago
 }
 
 function closeModal() {
     document.getElementById("payment-modal").classList.add("hidden");
 }
 
-function openAppHelpModal() {
-    document.getElementById("app-help-modal").classList.remove("hidden");
-}
-
-function closeAppHelpModal() {
-    document.getElementById("app-help-modal").classList.add("hidden");
-}
-
 function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
-    const paymentMethod = document.getElementById("payment-method").value;
 
     // Validación de campos antes de proceder
     if (isNaN(amountToPay) || amountToPay <= 0) {
         alert("Por favor, ingresa un monto válido.");
-        return;
-    }
-
-    if (paymentMethod === "") {
-        alert("Por favor, selecciona un método de pago.");
         return;
     }
 
@@ -215,8 +195,7 @@ function confirmPayment() {
             id: currentPaymentId,
             concept: selectedPayments[0].concept,
             totalAmount: selectedPayments[0].totalAmount,
-            date: selectedPayments[0].date,
-            paymentMethod: paymentMethod
+            date: selectedPayments[0].date
         });
         payments = payments.filter(p => p.id !== currentPaymentId);
     }
