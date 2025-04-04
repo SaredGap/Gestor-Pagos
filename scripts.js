@@ -7,36 +7,26 @@ const totalAmountElement = document.getElementById("total-amount");
 
 let currentPaymentId = null;
 
-// Mostrar u ocultar campos de pago a plazos según el estado del checkbox
-document.getElementById('installments-checkbox').addEventListener('change', function() {
-    const installmentsContainer = document.getElementById('installments-container');
-    if (this.checked) {
-        installmentsContainer.classList.remove('hidden');
-    } else {
-        installmentsContainer.classList.add('hidden');
-    }
-});
-
-// Formulario de pago
+// Escuchar evento de envío del formulario de pago
 document.getElementById("payment-form").addEventListener("submit", function(event) {
     event.preventDefault();
-    
-    if (!validateForm()) return;  // Validación antes de continuar
-
     const concept = document.getElementById("concept").value.trim();
     const amount = parseFloat(document.getElementById("amount").value);
     const installments = parseInt(document.getElementById("installments").value);
     const startDate = document.getElementById("date").value;
-    const paymentMethod = document.getElementById("payment-method").value;
+
+    if (!concept || isNaN(amount) || isNaN(installments) || !startDate || amount <= 0 || installments <= 0) {
+        alert("Por favor, completa todos los campos correctamente.");
+        return;
+    }
 
     let paymentId = new Date().getTime();
     let installmentAmount = parseFloat((amount / installments).toFixed(2));
     let currentDate = new Date(startDate);
 
-    // Crear pagos en cuotas si es necesario
     for (let i = 1; i <= installments; i++) {
         let paymentDate = new Date(currentDate);
-        paymentDate.setMonth(paymentDate.getMonth() + i - 1); // Sumar un mes por cada cuota
+        paymentDate.setMonth(paymentDate.getMonth() + i - 1); // Sumamos un mes por cada cuota
 
         payments.push({
             id: paymentId,
@@ -47,8 +37,7 @@ document.getElementById("payment-form").addEventListener("submit", function(even
             pending: installmentAmount,
             date: paymentDate.toISOString().split('T')[0], // Fecha en formato YYYY-MM-DD
             installment: i,
-            totalInstallments: installments,
-            paymentMethod: paymentMethod // Guardamos el método de pago también
+            totalInstallments: installments
         });
     }
 
@@ -56,47 +45,6 @@ document.getElementById("payment-form").addEventListener("submit", function(even
     this.reset();
 });
 
-// Función de validación del formulario
-function validateForm() {
-    const concept = document.getElementById('concept').value.trim();
-    const amount = document.getElementById('amount').value;
-    const paymentMethod = document.getElementById('payment-method').value;
-    const installmentsContainer = document.getElementById('installments-container');
-    const installmentsCheckbox = document.getElementById('installments-checkbox');
-
-    // Validación básica de concepto, monto y método de pago
-    if (!concept || !amount || !paymentMethod) {
-        alert('Por favor, completa todos los campos obligatorios.');
-        return false;
-    }
-
-    // Si se marca el checkbox de "Pago a Plazos", validamos cuotas y fecha
-    if (installmentsCheckbox.checked) {
-        const installments = document.getElementById('installments').value;
-        const date = document.getElementById('date').value;
-
-        if (!installments || !date) {
-            alert('Por favor, completa los campos de cuotas y fecha de inicio del pago.');
-            return false;
-        }
-        if (parseInt(installments) <= 0) {
-            alert('El número de cuotas debe ser mayor a 0.');
-            return false;
-        }
-    }
-
-    // Si todo es válido
-    return true;
-}
-
-// Función para guardar y renderizar los pagos
-function saveAndRender() {
-    localStorage.setItem("payments", JSON.stringify(payments));
-    localStorage.setItem("completedPayments", JSON.stringify(completedPayments));
-    renderPayments();
-}
-
-// Función para renderizar los pagos
 function renderPayments() {
     paymentList.innerHTML = "";
     completedPaymentsList.innerHTML = "";
@@ -171,17 +119,16 @@ function renderPayments() {
     totalAmountElement.textContent = total.toFixed(2);
 }
 
-// Función para mostrar u ocultar cuotas
 function toggleInstallments(paymentId) {
     const installmentDiv = document.getElementById(`installments-${paymentId}`);
-    installmentDiv.classList.toggle("hidden");
+    installmentDiv.classList.toggle("hidden");  // Mostrar u ocultar las cuotas
     renderInstallments(paymentId);
 }
 
-// Función para renderizar las cuotas
 function renderInstallments(paymentId) {
     const list = document.getElementById(`installment-list-${paymentId}`);
-    list.innerHTML = "";
+    list.innerHTML = ""; // Limpiar lista de cuotas antes de volver a renderizar
+
     payments.filter(p => p.id === paymentId).forEach(p => {
         list.innerHTML += `
             <tr>
@@ -194,7 +141,6 @@ function renderInstallments(paymentId) {
     });
 }
 
-// Función para abrir el modal de pago
 function openPaymentModal(paymentId, pendingAmount) {
     currentPaymentId = paymentId;
     document.getElementById("payment-modal").classList.remove("hidden");
@@ -202,12 +148,10 @@ function openPaymentModal(paymentId, pendingAmount) {
     document.getElementById("payment-method").value = ''; // Limpiar el campo del método de pago
 }
 
-// Función para cerrar el modal
 function closeModal() {
     document.getElementById("payment-modal").classList.add("hidden");
 }
 
-// Función para confirmar el pago
 function confirmPayment() {
     let amountToPay = parseFloat(document.getElementById("payment-amount").value);
     const paymentMethod = document.getElementById("payment-method").value;
@@ -246,11 +190,9 @@ function confirmPayment() {
             id: currentPaymentId,
             concept: selectedPayments[0].concept,
             totalAmount: selectedPayments[0].totalAmount,
-            date: new Date().toISOString().split('T')[0],
+            date: selectedPayments[0].date,
             paymentMethod: paymentMethod
         });
-
-        // Eliminar pago de la lista de pagos pendientes
         payments = payments.filter(p => p.id !== currentPaymentId);
     }
 
@@ -258,17 +200,24 @@ function confirmPayment() {
     closeModal();
 }
 
-// Función para eliminar un pago
 function deletePayment(paymentId) {
     payments = payments.filter(p => p.id !== paymentId);
     saveAndRender();
 }
 
-// Función para eliminar un pago completado
 function deleteCompletedPayment(paymentId) {
     completedPayments = completedPayments.filter(p => p.id !== paymentId);
     saveAndRender();
 }
 
-// Inicializamos la vista al cargar la página
-renderPayments();
+function toggleCompletedPayments() {
+    completedPaymentsSection.classList.toggle("hidden");
+}
+
+function saveAndRender() {
+    localStorage.setItem("payments", JSON.stringify(payments));
+    localStorage.setItem("completedPayments", JSON.stringify(completedPayments));
+    renderPayments();
+}
+
+renderPayments(); 
