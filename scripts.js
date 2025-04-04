@@ -53,10 +53,11 @@ function renderPayments() {
     payments.forEach(p => {
         total += p.amount;
         if (!groupedPayments[p.id]) {
-            groupedPayments[p.id] = { ...p, paid: 0, pending: 0 };
+            groupedPayments[p.id] = { ...p, paid: 0, pending: 0, installments: [] };
         }
         groupedPayments[p.id].paid += p.paid;
         groupedPayments[p.id].pending += p.pending;
+        groupedPayments[p.id].installments.push(p);
     });
 
     Object.values(groupedPayments).forEach(p => {
@@ -148,14 +149,6 @@ function openPaymentModal(paymentId, pendingAmount) {
 
 function closeModal() {
     document.getElementById("payment-modal").classList.add("hidden");
-}
-
-function openAppHelpModal() {
-    document.getElementById("app-help-modal").classList.remove("hidden");
-}
-
-function closeAppHelpModal() {
-    document.getElementById("app-help-modal").classList.add("hidden");
 }
 
 function confirmPayment() {
