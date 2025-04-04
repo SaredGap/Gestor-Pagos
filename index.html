@@ -82,55 +82,6 @@
     </button>
 </form>
 
-<!-- Script para manejar la visibilidad de los campos y validación -->
-<script>
-    function togglePaymentOptions() {
-        const installmentsContainer = document.getElementById('installments-container');
-        const dateContainer = document.getElementById('date-container');
-        const isChecked = document.getElementById('payment-plans').checked;
-
-        // Mostrar u ocultar los campos dependiendo del checkbox
-        if (isChecked) {
-            installmentsContainer.classList.remove('hidden');
-            dateContainer.classList.remove('hidden');
-        } else {
-            installmentsContainer.classList.add('hidden');
-            dateContainer.classList.add('hidden');
-        }
-    }
-
-    // Función para validar el formulario
-    function validateForm() {
-        const concept = document.getElementById('concept').value;
-        const amount = document.getElementById('amount').value;
-        const paymentMethod = document.getElementById('payment-method').value;
-        const installmentsContainer = document.getElementById('installments-container');
-        const dateContainer = document.getElementById('date-container');
-
-        // Validar Concepto y Monto
-        if (!concept || !amount || !paymentMethod) {
-            alert('Por favor, completa todos los campos obligatorios.');
-            return false;
-        }
-
-        // Validar cuotas y fecha solo si están visibles (si "Pago a Plazos" está marcado)
-        if (!installmentsContainer.classList.contains('hidden')) {
-            const installments = document.getElementById('installments').value;
-            const date = document.getElementById('date').value;
-
-            if (!installments || !date) {
-                alert('Por favor, completa los campos de cuotas y fecha de pago.');
-                return false;
-            }
-        }
-
-        // Si todo es válido
-        return true;
-    }
-</script>
-
-
-
         <!-- Resumen de pagos -->
         <h2 class="text-xl font-semibold mt-4">Total: $<span id="total-amount">0</span></h2>
         
