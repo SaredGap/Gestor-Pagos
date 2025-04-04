@@ -53,6 +53,19 @@
         <input type="date" id="date" required class="border p-2 rounded w-full focus:ring-2 focus:ring-blue-300">
     </div>
 
+    <!-- Método de Pago -->
+    <label for="payment-method" class="block text-gray-600 font-medium">Método de Pago:</label>
+    <div class="relative mb-3">
+        <select id="payment-method" required 
+            class="border p-2 rounded w-full focus:ring-2 focus:ring-blue-300">
+            <option value="" disabled selected>Selecciona un método</option>
+            <option value="cash">💵 Efectivo</option>
+            <option value="card">💳 Tarjeta</option>
+            <option value="transfer">🏦 Transferencia</option>
+            <option value="other">🔄 Otro</option>
+        </select>
+    </div>
+
     <!-- Botón -->
     <button type="submit" class="bg-blue-500 text-white p-3 rounded w-full flex items-center justify-center hover:bg-blue-600 transition">
         <i class="fas fa-plus mr-2"></i> Agregar Pago
