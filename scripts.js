@@ -118,11 +118,6 @@ function renderPayments() {
     totalAmountElement.textContent = total.toFixed(2);
 }
 
-function activarCampos() {
-    document.getElementById('fecha').disabled = false;
-    document.getElementById('cuotas').disabled = false;
-}
-
 function toggleInstallments(paymentId) {
     const installmentDiv = document.getElementById(installments-${paymentId});
     installmentDiv.classList.toggle("hidden");
