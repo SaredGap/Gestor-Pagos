@@ -33,23 +33,25 @@
     <!-- Monto -->
     <label for="amount" class="block text-gray-600 font-medium">Monto ($):</label>
     <div class="relative mb-3">
-        <input type="number" id="amount" placeholder="Monto total" required min="1"
+        <input type="number" id="amount" placeholder="Monto total" required step="0.01" min="0"
             class="border p-2 rounded w-full pl-10 focus:ring-2 focus:ring-blue-300">
         <i class="fas fa-dollar-sign absolute left-3 top-3 text-gray-400"></i>
     </div>
+
+     <button id="activarCampos" onclick="activarCampos()">Habilitar Fecha y Cuotas</button>       
 
     <!-- Número de Cuotas -->
     <label for="installments" class="block text-gray-600 font-medium">Número de Cuotas:</label>
     <div class="relative mb-3">
         <input type="number" id="installments" placeholder="Ej. 1, 2, 3..." required min="1" max="36"
-            class="border p-2 rounded w-full pl-10 focus:ring-2 focus:ring-blue-300">
+            class="border p-2 rounded w-full pl-10 focus:ring-2 focus:ring-blue-300" disabled>
         <i class="fas fa-layer-group absolute left-3 top-3 text-gray-400"></i>
     </div>
 
     <!-- Fecha del Pago -->
     <label for="date" class="block text-gray-600 font-medium">Fecha del Primer Pago:</label>
     <div class="relative mb-3">
-        <input type="date" id="date" required class="border p-2 rounded w-full focus:ring-2 focus:ring-blue-300">
+        <input type="date" id="date" required class="border p-2 rounded w-full focus:ring-2 focus:ring-blue-300" disabled>
     </div>
 
     <!-- Botón -->
