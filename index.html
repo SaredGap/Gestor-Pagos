@@ -193,6 +193,16 @@
 
 
 
-    <script src="scripts.js"></script>
+    <script src="scripts.js">
+
+          function activarCampos() {
+            // Verificar si el checkbox está activado
+            const isChecked = document.getElementById('activarCampos').checked;
+
+            // Habilitar o deshabilitar los campos dependiendo del estado del checkbox
+            document.getElementById('fecha').disabled = !isChecked;
+            document.getElementById('cuotas').disabled = !isChecked;
+        }
+    </script>
 </body>
 </html>
