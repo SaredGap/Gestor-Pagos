@@ -7,7 +7,6 @@ const totalAmountElement = document.getElementById("total-amount");
 
 let currentPaymentId = null;
 
-// Escuchar evento de envío del formulario de pago
 document.getElementById("payment-form").addEventListener("submit", function(event) {
     event.preventDefault();
     const concept = document.getElementById("concept").value.trim();
@@ -121,14 +120,13 @@ function renderPayments() {
 
 function toggleInstallments(paymentId) {
     const installmentDiv = document.getElementById(`installments-${paymentId}`);
-    installmentDiv.classList.toggle("hidden");  // Mostrar u ocultar las cuotas
+    installmentDiv.classList.toggle("hidden");
     renderInstallments(paymentId);
 }
 
 function renderInstallments(paymentId) {
     const list = document.getElementById(`installment-list-${paymentId}`);
-    list.innerHTML = ""; // Limpiar lista de cuotas antes de volver a renderizar
-
+    list.innerHTML = "";
     payments.filter(p => p.id === paymentId).forEach(p => {
         list.innerHTML += `
             <tr>
@@ -150,6 +148,14 @@ function openPaymentModal(paymentId, pendingAmount) {
 
 function closeModal() {
     document.getElementById("payment-modal").classList.add("hidden");
+}
+
+function openAppHelpModal() {
+    document.getElementById("app-help-modal").classList.remove("hidden");
+}
+
+function closeAppHelpModal() {
+    document.getElementById("app-help-modal").classList.add("hidden");
 }
 
 function confirmPayment() {
@@ -220,4 +226,4 @@ function saveAndRender() {
     renderPayments();
 }
 
-renderPayments(); 
+renderPayments();
