@@ -61,7 +61,7 @@ function renderPayments() {
 
     Object.values(groupedPayments).forEach(p => {
         let progress = (p.paid / p.totalAmount) * 100; // Calculamos el porcentaje de pago
-        paymentList.innerHTML += 
+        paymentList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
                 <td class="border p-2">$${p.totalAmount}</td>
@@ -98,11 +98,11 @@ function renderPayments() {
                     <p class="text-sm text-center">${progress.toFixed(2)}% Pagado</p>
                 </td>
             </tr>
-        ;
+        `;
     });
 
     completedPayments.forEach(p => {
-        completedPaymentsList.innerHTML += 
+        completedPaymentsList.innerHTML += `
             <tr>
                 <td class="border p-2">${p.concept}</td>
                 <td class="border p-2">$${p.totalAmount}</td>
@@ -112,30 +112,30 @@ function renderPayments() {
                     <button onclick="deleteCompletedPayment(${p.id})" class="bg-red-500 text-white p-1 rounded">Eliminar</button>
                 </td>
             </tr>
-        ;
+        `;
     });
 
     totalAmountElement.textContent = total.toFixed(2);
 }
 
 function toggleInstallments(paymentId) {
-    const installmentDiv = document.getElementById(installments-${paymentId});
+    const installmentDiv = document.getElementById(`installments-${paymentId}`);
     installmentDiv.classList.toggle("hidden");
     renderInstallments(paymentId);
 }
 
 function renderInstallments(paymentId) {
-    const list = document.getElementById(installment-list-${paymentId});
+    const list = document.getElementById(`installment-list-${paymentId}`);
     list.innerHTML = "";
     payments.filter(p => p.id === paymentId).forEach(p => {
-        list.innerHTML += 
+        list.innerHTML += `
             <tr>
                 <td class="border p-2">Cuota ${p.installment}/${p.totalInstallments}</td>
                 <td class="border p-2">${p.date}</td>
                 <td class="border p-2">$${p.paid.toFixed(2)}</td>
                 <td class="border p-2">$${p.pending.toFixed(2)}</td>
             </tr>
-        ;
+        `;
     });
 }
 
@@ -169,7 +169,7 @@ function confirmPayment() {
     }
 
     if (paymentMethod === "") {
-        alert("Por favor, selecciona un metodo de pago.");
+        alert("Por favor, selecciona un método de pago.");
         return;
     }
 
