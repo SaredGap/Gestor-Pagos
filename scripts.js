@@ -9,15 +9,14 @@ let currentPaymentId = null;
 
 document.getElementById("payment-form").addEventListener("submit", function(event) {
     event.preventDefault();
+    
+    if (!validateForm()) return;  // Validación antes de continuar
+
     const concept = document.getElementById("concept").value.trim();
     const amount = parseFloat(document.getElementById("amount").value);
     const installments = parseInt(document.getElementById("installments").value);
     const startDate = document.getElementById("date").value;
-
-    if (!concept || isNaN(amount) || isNaN(installments) || !startDate || amount <= 0 || installments <= 0) {
-        alert("Por favor, completa todos los campos correctamente.");
-        return;
-    }
+    const paymentMethod = document.getElementById("payment-method").value;
 
     let paymentId = new Date().getTime();
     let installmentAmount = parseFloat((amount / installments).toFixed(2));
@@ -36,7 +35,8 @@ document.getElementById("payment-form").addEventListener("submit", function(even
             pending: installmentAmount,
             date: paymentDate.toISOString().split('T')[0], // Fecha en formato YYYY-MM-DD
             installment: i,
-            totalInstallments: installments
+            totalInstallments: installments,
+            paymentMethod: paymentMethod // Guardamos el método de pago también
         });
     }
 
@@ -53,11 +53,10 @@ function renderPayments() {
     payments.forEach(p => {
         total += p.amount;
         if (!groupedPayments[p.id]) {
-            groupedPayments[p.id] = { ...p, paid: 0, pending: 0, installments: [] };
+            groupedPayments[p.id] = { ...p, paid: 0, pending: 0 };
         }
         groupedPayments[p.id].paid += p.paid;
         groupedPayments[p.id].pending += p.pending;
-        groupedPayments[p.id].installments.push(p);
     });
 
     Object.values(groupedPayments).forEach(p => {
@@ -219,4 +218,34 @@ function saveAndRender() {
     renderPayments();
 }
 
+// Función para validar el formulario
+function validateForm() {
+    const concept = document.getElementById('concept').value;
+    const amount = document.getElementById('amount').value;
+    const paymentMethod = document.getElementById('payment-method').value;
+    const installmentsContainer = document.getElementById('installments-container');
+    const dateContainer = document.getElementById('date-container');
+
+    // Validar Concepto y Monto
+    if (!concept || !amount || !paymentMethod) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return false;
+    }
+
+    // Validar cuotas y fecha solo si están visibles (si "Pago a Plazos" está marcado)
+    if (!installmentsContainer.classList.contains('hidden')) {
+        const installments = document.getElementById('installments').value;
+        const date = document.getElementById('date').value;
+
+        if (!installments || !date) {
+            alert('Por favor, completa los campos de cuotas y fecha de pago.');
+            return false;
+        }
+    }
+
+    // Si todo es válido
+    return true;
+}
+
+// Llamada inicial para renderizar los pagos
 renderPayments();
